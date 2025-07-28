@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../job.xsd">
+	<jobName>Importazione giornaliera dati banca</jobName>
+	<isThread>false</isThread>
+	<task>
+		<id>1</id>
+		<name>Drop Indexes</name>
+		<sqlProcess>
+		<sql><![CDATA[
+		DECLARE
+				check_ix_codice 				INTEGER:=0;
+				check_ix_tiporapporto			INTEGER:=0;
+				check_ix_codiceinterno			INTEGER:=0;
+				check_ix_codicerapporto			INTEGER:=0;
+				check_ix_mov_g_codrapp			INTEGER:=0;			
+				check_ix_rapporto_pz1			INTEGER:=0;
+		
+				
+		BEGIN
+				SELECT COUNT(*) INTO check_ix_codice FROM user_indexes WHERE index_name = 'IX_MOV_CODICE' AND table_owner = 'RENDIMPC';
+				SELECT COUNT(*) INTO check_ix_tiporapporto FROM user_indexes WHERE index_name = 'IX_MOV_TIPORAPP' AND table_owner = 'RENDIMPC';
+				SELECT COUNT(*) INTO check_ix_codiceinterno FROM user_indexes WHERE index_name = 'IX_MOV_CODINT' AND table_owner = 'RENDIMPC';
+				SELECT COUNT(*) INTO check_ix_codicerapporto FROM user_indexes WHERE index_name = 'IX_MOV_CODRAPP' AND table_owner = 'RENDIMPC';
+				SELECT COUNT(*) INTO check_ix_mov_g_codrapp FROM user_indexes WHERE index_name = 'IX_MOV_G_CODRAPP' AND table_owner = 'RENDIMPC';				
+				SELECT COUNT(*) INTO check_ix_rapporto_pz1 FROM user_indexes WHERE index_name = 'IX_RAPPORTO_PZ1' AND table_owner = 'RENDIMPC';
+		
+			   	IF check_ix_codice = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_CODICE';
+				END IF;
+				IF check_ix_tiporapporto = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_TIPORAPP';
+				END IF;
+				IF check_ix_codiceinterno = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_CODINT';
+				END IF;
+				IF check_ix_codicerapporto = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_CODRAPP';
+				END IF;
+				IF check_ix_mov_g_codrapp = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_G_CODRAPP';
+				END IF;
+				IF check_ix_rapporto_pz1 = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_RAPPORTO_PZ1';
+				END IF;				
+			END;]]></sql>
+		</sqlProcess>
+	</task>
+	
+	<task>
+		<id>2</id>
+		<name>Truncate tmp</name>
+		<sqlProcess>
+			<sql><![CDATA[TRUNCATE TABLE TMP_PFSALDI_MOVIMP]]></sql>
+		</sqlProcess>
+	</task>
+	
+	<task>
+		<id>3</id>
+		<name>Import</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.model.ImportMultiThreadJob</className>
+			
+			<!-- flussi giornaliero PFP -->
+			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_CAMBI.xml</arg>
+   			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_COSTI_PRODOTTO.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_COSTI_SERVIZIO.xml</arg> 
+  			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_PREZZI.xml</arg> 
+   			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_PREZZI_TITOLI.xml</arg>
+   			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_SALDI_STORICI.xml</arg> 
+ 			
+			<!-- flussi Polizze -->
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_MOV_INCASSATO_COASS.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_MOV_PAGAMENTI_COASS.xml</arg> 
+			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_SALDI_POLIZZE.xml</arg>		
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_SALDI_POLIZZE_SP.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PFRECUPERO_SALDI_POLIZZE.xml</arg>		
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PFRECUPERO_SALDI_POLIZZE_SP.xml</arg> 			
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_MOV_INC_FONDO.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_MOV_PAG_FONDO.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_MOV_SWPRIVATE.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_QUOTAZIONE_R3.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_SALDI_GP.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_MOV_GP.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_COSTI_GP.xml</arg>
+
+			<!-- flussi movimenti -->	 		
+			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_MOVIMENTI.xml</arg>
+  			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_MOVIMENTI_TITOLI.xml</arg>
+  			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_COSTI_MOVIMENTI.xml</arg>
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_COSTI_MOVIMENTI_TITOLI.xml</arg>
+
+			<!-- flussi costi fondi esterni AFB -->
+			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PF_COSTI_AFB.xml</arg>
+		</javaProcess>
+	</task>
+
+	<task>
+		<id>4</id>
+		<name>PK e INDEXES</name>
+		
+		<sqlProcess>
+			<sql><![CDATA[
+				DECLARE
+				  i INTEGER;
+				BEGIN
+				  SELECT COUNT(*) INTO i FROM user_constraints WHERE constraint_name = 'NDG_PK';
+					IF i =0 THEN
+					    EXECUTE IMMEDIATE 'ALTER TABLE NDG ADD CONSTRAINT NDG_PK PRIMARY KEY (CODICEBANCA,NDG) USING INDEX TABLESPACE RENDIMPC_INDEX';
+					END IF;
+				END;
+			]]></sql>
+			
+			<sql><![CDATA[
+				DECLARE
+				  i INTEGER;
+				BEGIN
+				  
+					SELECT COUNT(*) INTO i FROM user_indexes WHERE index_name = 'IX_NDG_NDG';
+					IF i = 0 THEN
+					EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX IX_NDG_NDG ON NDG(NDG) TABLESPACE RENDIMPC_INDEX ';
+					END IF;
+				  
+				 	SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME =  'RAPP_NDGC_IDX';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'CREATE INDEX RAPP_NDGC_IDX ON RAPPORTO (NDGC) TABLESPACE RENDIMPC_INDEX';
+					END IF;
+					
+					SELECT COUNT(*) INTO i FROM user_constraints WHERE constraint_name = 'RAPP_FK_IDPTF';
+					IF i =0 THEN
+					    EXECUTE IMMEDIATE 'ALTER TABLE RAPPORTO ADD CONSTRAINT RAPP_FK_IDPTF FOREIGN KEY (IDPTF) REFERENCES  PORTAFOGLIO (ID)';
+					END IF;
+					
+					SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME =  'RAP_PTF_IDX';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'CREATE INDEX RAP_PTF_IDX ON RAPPORTO(IDPTF) TABLESPACE RENDIMPC_INDEX';
+					END IF;
+					
+					SELECT COUNT(*) INTO i FROM user_constraints WHERE constraint_name = 'RAPP_FK_NDG';
+					IF i =0 THEN
+					    EXECUTE IMMEDIATE 'ALTER TABLE RAPPORTO ADD CONSTRAINT RAPP_FK_NDG FOREIGN KEY (NDG,CODICEBANCA) REFERENCES  NDG (NDG,CODICEBANCA)';
+					END IF;
+					
+					SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME =  'RAPP_NDG_IDX';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'CREATE INDEX RAPP_NDG_IDX ON RAPPORTO (NDG) TABLESPACE RENDIMPC_INDEX';
+					END IF;
+					
+					SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME = 'TEMP_IDX_TMP_RAP';
+					IF i = 1 THEN
+					    EXECUTE IMMEDIATE 'DROP INDEX TEMP_IDX_TMP_RAP';
+					END IF;
+				   
+				    SELECT COUNT(*) INTO i FROM user_indexes WHERE index_name = 'PFRAP_NDG_IDX';
+				    IF i = 1 THEN
+				        EXECUTE IMMEDIATE 'DROP INDEX PFRAP_NDG_IDX';
+				    END IF;
+				    
+				    SELECT COUNT(*) INTO i FROM user_indexes WHERE index_name = 'RAPP_NDG_IDX';
+				    IF i = 0 THEN
+				        EXECUTE IMMEDIATE 'CREATE INDEX RAPP_NDG_IDX ON RAPPORTO (NDG) TABLESPACE RENDIMPC_INDEX';
+				    END IF;
+				
+				    SELECT COUNT(*) INTO i FROM user_indexes WHERE index_name = 'RAPPORTO_IDX';
+				    IF i = 0 THEN
+				        EXECUTE IMMEDIATE 'CREATE INDEX RAPPORTO_IDX ON RAPPORTO(NDG,CODICERAPPORTO,CODICEAGENZIA) TABLESPACE RENDIMPC_INDEX ';
+				    END IF;
+				    
+				    SELECT COUNT(*) INTO i FROM USER_CONSTRAINTS WHERE CONSTRAINT_NAME = 'TEMP_RAP_REC_PK';
+				    IF i > 0 THEN
+				        EXECUTE IMMEDIATE 'ALTER TABLE TEMP_RAP_REC DROP CONSTRAINT TEMP_RAP_REC_PK';
+				    END IF;
+				    
+				    SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME =  'RAPP_TMPSAL_IDX';
+					IF i > 0 THEN
+					    EXECUTE IMMEDIATE 'DROP INDEX RAPP_TMPSAL_IDX';
+					END IF;
+				    
+				END;
+			]]></sql>
+		</sqlProcess>
+	</task>
+</job>

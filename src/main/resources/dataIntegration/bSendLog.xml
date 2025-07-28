@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="job.xsd">
+	<jobName>Send log</jobName>
+	<isThread>false</isThread>
+	
+	<task>
+		<id>1</id>
+		<name>EXPORT STAT</name>
+		<jobProcess>
+			<fileName>bExportLog.xml</fileName>
+			<filePath>%PATH_FASI_XML%/</filePath>
+		</jobProcess>
+	</task>
+	
+	<task>
+		<id>2</id>
+		<name>CREATE zip</name>
+		<fileSystemProcess>
+			<zip>
+				<source>
+					<sourceFolder>%LOGFILEPATH%/</sourceFolder>
+					<sourceFilePattern>batch.log$</sourceFilePattern>
+				</source>
+				<zipName>/opt/POSTE/PFP_App/ftpFiles/BATCH_%TODAY%.zip</zipName>
+				<overwrite>true</overwrite>
+			</zip>
+		</fileSystemProcess>	
+		
+	</task>
+	
+</job>

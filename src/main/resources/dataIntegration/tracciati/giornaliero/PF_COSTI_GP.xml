@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	
+	<tableName>PFCOSTI_GP</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_GPM_Costi_CONCAT.csv</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>,</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>false</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+
+	<tracciatoField>
+		<columnName>ABI_CODE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Banca]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CAB_CODE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Filiale]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>ACCOUNT_NUMBER</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Account Number]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>IDENTIFIER_VALUE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Fiscale]]></description>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>PRODUCT_IDENTIFIER</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Prodotto]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>PORTFOLIO_ID</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Portfolio UUID]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>REASON</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Costo]]></description>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>PERIOD_START_DATE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Inizio]]></description>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>PERIOD_END_DATE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Fine]]></description>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>AMOUNT</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Costo]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>INTERNAL_IDENTIFIER</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Identificativo Interno]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>DATE_TIME</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Aggiornamento]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CODICETITOLO_INTERNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Linea]]></description>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+</tracciato>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="job.xsd">
+	<jobName>TEST CONNECTION</jobName>
+	<isThread>false</isThread>
+	<task>
+		<id>1</id>
+		<name>TEST CONNECTION</name>
+		<sqlProcess>
+			<sql><![CDATA[
+					SELECT 1 FROM DUAL
+			]]></sql>
+		</sqlProcess>
+	</task>
+
+</job>
+
+
+
+	

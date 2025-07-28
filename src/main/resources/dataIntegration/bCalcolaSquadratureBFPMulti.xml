@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="job.xsd">
+	<jobName>Squadrature BFP Multi</jobName>
+	<isThread>false</isThread>
+	<task>
+		<id>4</id>
+		<name>Squadrature bfp multithread</name>
+		
+		<sqlProcess>
+		
+			<sql><![CDATA[
+				DECLARE
+					I INTEGER;
+					
+					BEGIN
+					
+					SELECT COUNT(*) INTO I FROM ALL_TABLES WHERE UPPER(TABLE_NAME)=UPPER('NDG_TABLE_SQUADRATURE_BFP') AND OWNER='RENDIMPC';
+						IF I = 1 THEN
+						EXECUTE IMMEDIATE 'DROP TABLE RENDIMPC.NDG_TABLE_SQUADRATURE_BFP'; 
+						COMMIT;
+						END IF;
+					END;
+ 			]]></sql>
+ 			
+ 			<sql><![CDATA[
+				DECLARE
+					I INTEGER;
+					
+					BEGIN
+					
+					SELECT COUNT(*) INTO I FROM ALL_TABLES WHERE UPPER(TABLE_NAME)=UPPER('NDG_TABLE_SQUADRATURE_BFP') AND OWNER='RENDIMPC';
+						IF I = 0 THEN
+						EXECUTE IMMEDIATE 'CREATE TABLE NDG_TABLE_SQUADRATURE_BFP (
+											        RN NUMBER,
+											        NDG NUMBER, 
+											        IDRAPPORTO NUMBER, 
+											        IDPTF NUMBER
+											)
+							NOLOGGING PARALLEL 8 INITRANS 8'; -- aggiungere nologging e tablespace parallel 
+						COMMIT;
+						END IF;
+					END;
+ 			]]></sql>
+ 			
+ 			
+ 			<sql><![CDATA[
+				DECLARE
+					I INTEGER;
+					
+					BEGIN
+					
+					SELECT COUNT(*) INTO I FROM CONFIGINI WHERE CODICE='saldo_bfp_variazione_giorni';
+						IF I = 0 THEN
+							INSERT INTO CONFIGINI (CODICE,VALORE) VALUES('saldo_bfp_variazione_giorni', 365); 
+							COMMIT;
+						END IF;
+						
+					SELECT COUNT(*) INTO I FROM CONFIGINI WHERE CODICE='saldo_bfp_variazione_soglia';
+						IF I = 0 THEN
+							INSERT INTO CONFIGINI (CODICE,VALORE) VALUES('saldo_bfp_variazione_soglia', 0.06); 
+							COMMIT;
+						END IF;	
+					END;
+ 			]]></sql>
+ 			
+ 			
+		</sqlProcess>
+		
+		
+		<javaProcess>
+			<className>it.prometeia.pfp.squadrature.TaskCalcoloSquadratureInitIndexBFP</className>
+ 			<arg>-startDates</arg>  
+   			<arg>%systemProps[DATA_INIZIO]%</arg> 
+   			<arg>-tipoStrumento</arg>
+			<arg>BND</arg>
+			<arg>-tipoRapporto</arg>
+			<arg>03</arg>
+		</javaProcess>
+		
+		<sqlProcess>
+ 			<sql><![CDATA[
+ 				DECLARE
+					I INTEGER;
+					
+					BEGIN
+					
+					SELECT COUNT(*) INTO I FROM ALL_INDEXES WHERE INDEX_NAME='IDX_TMP_RAP_SQUAD_BFP' AND OWNER='RENDIMPC';
+						IF I = 0 THEN
+							EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX RENDIMPC.IDX_TMP_RAP_SQUAD_BFP ON NDG_TABLE_SQUADRATURE_BFP (RN,IDRAPPORTO) 
+							NOLOGGING PARALLEL 8 INITRANS 8 TABLESPACE RENDIMPC_INDEX'; -- aggiungere nologging e tablespace parallel
+							COMMIT;
+						
+						END IF;
+					END;
+ 			]]></sql>
+ 			
+ 			<sql><![CDATA[
+ 				DECLARE
+					I INTEGER;
+					
+					BEGIN
+					
+					SELECT COUNT(*) INTO I FROM ALL_INDEXES WHERE INDEX_NAME='IDX_TMP_PTF_SQUAD_BFP' AND OWNER='RENDIMPC';
+						IF I = 0 THEN
+							EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX RENDIMPC.IDX_TMP_PTF_SQUAD_BFP ON NDG_TABLE_SQUADRATURE_BFP (RN,IDPTF) 
+							NOLOGGING PARALLEL 8 INITRANS 8 TABLESPACE RENDIMPC_INDEX'; 
+							COMMIT;
+		
+		 				    dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'NDG_TABLE_SQUADRATURE_BFP', degree => 4, estimate_percent=>15, cascade=>true); 
+						
+						END IF;
+					END;
+			]]></sql>
+		</sqlProcess>
+
+	
+		<multiThreadControllerProcess>
+			<serviceType>SERVICE_TYPE_LOCAL</serviceType>
+			<maxThreads>24</maxThreads>
+			<processDataSupplier>
+				<customizedSupplier>
+					<pdSupplierClassName>it.prometeia.pfp.squadrature.SupplierSquadratureBFPBatch</pdSupplierClassName>
+				</customizedSupplier>
+				
+				<fixedArgument>-taskName</fixedArgument>
+				<fixedArgument>it.prometeia.pfp.squadrature.TaskCalcoloSquadratureMultiThread</fixedArgument>
+
+				<fixedArgument>-startDates</fixedArgument>
+				<fixedArgument>%systemProps[DATA_INIZIO]%</fixedArgument>
+				
+				<fixedArgument>-tipoStrumento</fixedArgument>
+				<fixedArgument>BND</fixedArgument>
+				<fixedArgument>-tipoRapporto</fixedArgument>
+				<fixedArgument>03</fixedArgument>
+
+			</processDataSupplier>
+		</multiThreadControllerProcess>
+	
+	
+		<sqlProcess>
+				
+	 			<sql><![CDATA[
+	 				DECLARE
+						I INTEGER;
+						
+						BEGIN
+						
+						SELECT COUNT(*) INTO I FROM ALL_INDEXES WHERE INDEX_NAME='IDX_TMP_RAP_SQUAD_BFP' AND OWNER='RENDIMPC';
+							IF I = 1 THEN
+								EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IDX_TMP_RAP_SQUAD_BFP';
+								COMMIT;
+							
+							END IF;
+						END;
+	 			]]></sql>
+	 			
+	 			<sql><![CDATA[
+	 				DECLARE
+						I INTEGER;
+						
+						BEGIN
+						
+						SELECT COUNT(*) INTO I FROM ALL_INDEXES WHERE INDEX_NAME='IDX_TMP_PTF_SQUAD_BFP' AND OWNER='RENDIMPC';
+							IF I = 1 THEN
+								EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IDX_TMP_PTF_SQUAD_BFP';
+								COMMIT;
+							END IF;
+						END;
+	 			]]></sql>
+			</sqlProcess>
+			
+			
+			
+				<sqlProcess>
+			<sql><![CDATA[
+ 				DECLARE
+					i INTEGER;
+				BEGIN
+				    EXECUTE IMMEDIATE 'ALTER SESSION ENABLE PARALLEL DML';
+				    EXECUTE IMMEDIATE 'ALTER SESSION FORCE PARALLEL DDL PARALLEL 32';
+				    EXECUTE IMMEDIATE 'ALTER SESSION FORCE PARALLEL QUERY PARALLEL 32';
+				    EXECUTE IMMEDIATE 'ALTER SESSION SET PARALLEL_FORCE_LOCAL=FALSE';
+				END;
+ 			]]></sql>
+ 			
+			<sql><![CDATA[
+ 				DELETE /*+ NOLOGGING PARALLEL(32) */ FROM VARIAZIONE_SALDO_BFP WHERE NOTE IN ('ASSENZA DI MOVIMENTI DI VERSAMENTO', 'ASSENZA DI MOVIMENTI', '3.1	Assenza di T-1')
+ 			]]></sql>
+
+			<sql><![CDATA[
+ 				INSERT /*+ APPEND NOLOGGING PARALLEL(32) */ INTO 
+			    RENDIMPC.VARIAZIONE_SALDO_BFP 
+			    ( 
+			        IDPTF, 
+			        CODICECLIENTE, 
+			        IDRAPPORTO, 
+			        TIPOSTRUM, 
+			        CODICETITOLO, 
+			        DATA_VARIAZIONE_SALDO, 
+			        DELTA_SALDO, 
+			        CTV_MOV, 
+			        NOTE, 
+			        CODICE, 
+			        DATASALDO, 
+			        DATA_ULTIMA_RILEVAZIONE 
+			    ) 
+				WITH BFP AS (
+				SELECT ID,IDPTF,NDG,DATAACCENSIONE FROM RAPPORTO
+				WHERE TIPO = '03') 
+				SELECT  /*+ PARALLEL(32) */ B.IDPTF, B.NDG, B.ID, NULL, SR.CODICETITOLO, NULL,NULL,NULL,'ASSENZA DI MOVIMENTI DI VERSAMENTO',NULL,DATAACCENSIONE,SYSDATE
+				FROM BFP B INNER JOIN SALDO_REND SR
+				ON SR.IDPTF = B.IDPTF
+				WHERE NOT EXISTS (SELECT 1 FROM MOVIMENTO M WHERE CAUSALE IN ('03_MOVIMP','03_001','03_003','03_008','03_015') AND M.IDRAPPORTO = B.ID)
+ 			]]></sql>
+ 			
+ 			<sql><![CDATA[
+ 				INSERT /*+ APPEND NOLOGGING PARALLEL(32) */ INTO 
+			    RENDIMPC.VARIAZIONE_SALDO_BFP 
+			    ( 
+			        IDPTF, 
+			        CODICECLIENTE, 
+			        IDRAPPORTO, 
+			        TIPOSTRUM, 
+			        CODICETITOLO, 
+			        DATA_VARIAZIONE_SALDO, 
+			        DELTA_SALDO, 
+			        CTV_MOV, 
+			        NOTE, 
+			        CODICE, 
+			        DATASALDO, 
+			        DATA_ULTIMA_RILEVAZIONE 
+			    ) 
+				WITH BFP AS (
+				SELECT ID,IDPTF,NDG,DATAACCENSIONE FROM RAPPORTO 
+				WHERE TIPO = '03') 
+				SELECT  /*+ PARALLEL(32) */ B.IDPTF, B.NDG, B.ID, NULL, SR.CODICETITOLO, NULL,NULL,NULL,'ASSENZA DI MOVIMENTI',NULL,DATAACCENSIONE,SYSDATE
+				FROM BFP B INNER JOIN SALDO_REND SR
+				ON SR.IDPTF = B.IDPTF
+				WHERE NOT EXISTS(SELECT 1 FROM MOVIMENTO M WHERE M.IDRAPPORTO=B.ID )
+ 			]]></sql>
+ 			
+ 			
+ 			<sql><![CDATA[
+ 				DELETE FROM VARIAZIONE_SALDO_BFP A
+				WHERE
+				   A.ROWID >
+				   ANY (SELECT B.ROWID
+				   FROM
+				      VARIAZIONE_SALDO_BFP B
+				   WHERE
+				      A.IDPTF = B.IDPTF
+				      AND
+				        A.CODICECLIENTE = B.CODICECLIENTE
+				        AND 
+				        A.IDRAPPORTO = B.IDRAPPORTO
+				        AND 
+				        A.CODICETITOLO = B.CODICETITOLO
+				        AND
+				        A.NOTE = B.NOTE
+				        AND 
+				        A.DATASALDO = B.DATASALDO
+				   )
+				   AND A.NOTE in ('ASSENZA DI MOVIMENTI','ASSENZA DI MOVIMENTI DI VERSAMENTO')
+ 			]]></sql>
+ 			
+ 			
+ 			
+		</sqlProcess>
+	</task>
+	
+
+</job>

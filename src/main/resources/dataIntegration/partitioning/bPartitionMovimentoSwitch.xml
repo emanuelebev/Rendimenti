@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../job.xsd">
+
+	<jobName>Bonifica</jobName>
+	<isThread>false</isThread>
+
+	<task>
+		<id>1</id>
+		<name>SWITCH PART_MOVIMENTO to MOVIMENTO</name>
+
+		<sqlProcess>
+		
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN
+				    SELECT COUNT(*) INTO i FROM user_tables WHERE table_name = 'PART_MOVIMENTO';
+				    IF i > 0 THEN
+				        EXECUTE IMMEDIATE 'ALTER TABLE COSTO_MOVIMENTO DROP CONSTRAINT FK_COSTO_MOVIM_MOVIMENTO';
+				        EXECUTE IMMEDIATE 'DROP TABLE MOVIMENTO';
+				        EXECUTE IMMEDIATE 'RENAME PART_MOVIMENTO TO MOVIMENTO';
+				    END IF;
+				END;
+			]]></sql>
+
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+	            	SELECT COUNT(*) INTO i FROM user_constraints WHERE constraint_name =  'FK_MOVIMENTO_RAPPORTO';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'ALTER TABLE MOVIMENTO ADD CONSTRAINT FK_MOVIMENTO_RAPPORTO FOREIGN KEY (IDRAPPORTO)
+											REFERENCES RAPPORTO (ID) ENABLE NOVALIDATE';
+					END IF;
+            	END;
+				
+			]]></sql>
+
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+	            	SELECT COUNT(*) INTO i FROM user_constraints WHERE constraint_name =  'FK_MOVIMENTO_CAUSALE';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'ALTER TABLE MOVIMENTO ADD CONSTRAINT FK_MOVIMENTO_CAUSALE FOREIGN KEY (CAUSALE)
+											REFERENCES CAUSALE (CODICECAUSALE) ENABLE NOVALIDATE';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+	            	SELECT COUNT(*) INTO i FROM user_constraints WHERE constraint_name =  'FK_MOVIMENTO_CODICETITOLO';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'ALTER TABLE MOVIMENTO ADD CONSTRAINT FK_MOVIMENTO_CODICETITOLO FOREIGN KEY (CODICETITOLO)
+											REFERENCES STRUMENTOFINANZIARIO (CODICETITOLO) ENABLE NOVALIDATE';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+       				SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME =  'IDX_MOVIMENTO_PK';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'CREATE INDEX IDX_MOVIMENTO_PK ON MOVIMENTO (IDRAPPORTO, NUMREG) NOLOGGING INITRANS 8 PARALLEL 8 LOCAL
+											STORE IN (TS_RENDIMPC_MOVS_IDX_01, TS_RENDIMPC_MOVS_IDX_02, TS_RENDIMPC_MOVS_IDX_03, TS_RENDIMPC_MOVS_IDX_04, TS_RENDIMPC_MOVS_IDX_05, 
+												TS_RENDIMPC_MOVS_IDX_06, TS_RENDIMPC_MOVS_IDX_07, TS_RENDIMPC_MOVS_IDX_08, TS_RENDIMPC_MOVS_IDX_09, TS_RENDIMPC_MOVS_IDX_10, 
+												TS_RENDIMPC_MOVS_IDX_11, TS_RENDIMPC_MOVS_IDX_12, TS_RENDIMPC_MOVS_IDX_13, TS_RENDIMPC_MOVS_IDX_14, TS_RENDIMPC_MOVS_IDX_15, 
+												TS_RENDIMPC_MOVS_IDX_16, TS_RENDIMPC_MOVS_IDX_17, TS_RENDIMPC_MOVS_IDX_18, TS_RENDIMPC_MOVS_IDX_19, TS_RENDIMPC_MOVS_IDX_20)';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+	            	SELECT COUNT(*) INTO i FROM user_constraints WHERE constraint_name =  'MOVIMENTO_PK';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'ALTER TABLE MOVIMENTO ADD CONSTRAINT MOVIMENTO_PK PRIMARY KEY (IDRAPPORTO, NUMREG) USING INDEX IDX_MOVIMENTO_PK';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+       				SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME =  'IX_MOVIMENTO_CAUSALE_FK';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'CREATE INDEX IX_MOVIMENTO_CAUSALE_FK ON MOVIMENTO (CAUSALE) NOLOGGING INITRANS 8 PARALLEL 8';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+       				SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME =  'IX_MOVIMENTO_SF_FK';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'CREATE INDEX IX_MOVIMENTO_SF_FK ON MOVIMENTO (CODICETITOLO) NOLOGGING INITRANS 8 PARALLEL 8';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			<sql><![CDATA[
+				ALTER TABLE RENDIMPC.MOVIMENTO LOGGING
+			]]></sql>
+
+		</sqlProcess>
+	</task>
+
+</job>

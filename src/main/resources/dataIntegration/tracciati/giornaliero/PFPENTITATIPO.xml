@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+
+	<!--TABELLA ENTITA TIPO-->
+
+	<tableName>PFPENTITATIPO</tableName>
+	<skipDropTable>true</skipDropTable>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipFirstLine>FALSE</skipFirstLine>
+	<importFilePath>%PATH_FASI_XML%/flussi/PFPENTITATIPO.CSV</importFilePath>
+
+	<!-- START OF PRIMARY KEY  -->
+	<tracciatoField>
+		<columnName>TIPOLOGIA</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[CODICE ENTITA]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>C_TIPO_ENTITA</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[CODICE ENTITA]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>C_TIPO_GRUPPO</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[CODICE TIPO]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>C_TIPO_SOTTOGRUPPO</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[CODICE TIPO SOTTOGRUPPO]]></description>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>LIV1</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[LIV1]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>LIV2</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[LIV2]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>LIV3</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[LIV3]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>TIPO_PFP</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[TIPO PFP]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>MACROTIPOLOGIA</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[MACROTIPOLOGIA]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>SOTTOTIPOLOGIA_1</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[SOTTOTIPOLOGIA_1]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>TIPO_EX_ANTE</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[TIPO_EX_ANTE]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>DESC_TIPO_EX_ANTE</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>250</columnMaxLength>
+		<description><![CDATA[DESC_TIPO_EX_ANTE]]></description>
+	</tracciatoField>
+	
+
+	<!-- END OF PRIMARY KEY  -->
+	
+
+	
+</tracciato>

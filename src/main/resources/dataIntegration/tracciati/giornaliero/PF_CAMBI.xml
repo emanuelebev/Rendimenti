@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFCAMBI</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_Titoli_Cambi_CONCAT.csv</importFilePath>	
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>false</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+
+	<!-- 1 CodiceBanca Codice della banca o dell’intermediario finanziario a 
+		cui afferisce l’NDG S (KEY) Varchar(5) Nel caso non sia prevista una codifica 
+		distinta per Banche / Intermediari appertenenti al Gruppo, puo’ essere valorizzato 
+		un unico codice rappresentativo. Ad es. 7601 -->
+
+	<tracciatoField>
+		<columnName>CodiceBanca</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceBanca]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 2 CodiceDivisaCerto Codice ISO tre lettere della divisa certa (tipicamente 
+		fisso EUR). S (KEY) Varchar(3) -->
+
+	<tracciatoField>
+		<columnName>CodiceDivisaCerto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceDivisaCerto]]></description>
+		<columnMaxLength>3</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 3 CodiceDivisaIncerto Codice ISO tre lettere della divisa incerta. 
+		S (KEY) Varchar(3) -->
+
+	<tracciatoField>
+		<columnName>CodiceDivisaIncerto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceDivisaIncerto]]></description>
+		<columnMaxLength>3</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 4 DataCambio Codice divisa di riferimento del prezzo nel caso di obbligazioni 
+		riferita alla divisa del valore nominale. S (KEY) Data -->
+
+	<tracciatoField>
+		<columnName>DataCambio</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataContabile]]></description>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+
+	<!-- 5 Cambio Valore del cambio certo per incerto (1=x) Applicando il cambio 
+		si converte da divisa a EURO con il rapporto. Esempio: Cambio = 1,18134 1000 
+		USD = 1000 / 1,18134 = 846,50 S Number(22,3) -->
+
+	<tracciatoField>
+		<columnName>Cambio</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Cambio]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+
+	<!-- 6 DataAggiornamento Data di aggiornamento S Timestamp -->
+
+	<tracciatoField>
+		<columnName>DataAggiornamento</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataAggiornamento]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+</tracciato>

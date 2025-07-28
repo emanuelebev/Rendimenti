@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFSALDISTORICI</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_EDWH_SaldiStorici_CONCAT.csv</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName> 
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	
+	<!-- 1 CodiceBanca Codice della banca o dell’intermediario finanziario a 
+		cui afferisce l’NDG S (KEY) Varchar(5) Nel caso non sia prevista una codifica 
+		distinta per Banche / Intermediari appertenenti al Gruppo, puo’ essere valorizzato 
+		un unico codice rappresentativo. Ad es. 7601 x -->
+
+	<tracciatoField>
+		<columnName>CODICEBANCA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceBanca]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+
+	<!-- 2 CodiceAgenzia codice del’agenzia della banca o dell’intermediario 
+		finanziario a cui afferisce il rapporto S (KEY) Varchar(50) x -->
+
+	<tracciatoField>
+		<columnName>CODICEAGENZIA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceAgenzia]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 3 CodiceRapporto Codice alfanumerico del rapporto S (KEY) Varchar(50) 
+		x -->
+
+	<tracciatoField>
+		<columnName>CODICERAPPORTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceRapporto]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 4 CodiceInterno Codice interno dello strumento S (KEY) Varchar(50) 
+		x -->
+
+	<tracciatoField>
+		<columnName>CODICEINTERNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceInterno]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+
+	<!-- 5 DataSaldo Data di riferimento del saldo S Data x -->
+
+	<tracciatoField>
+		<columnName>DATASALDO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataSaldo]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+
+	<!-- 6 TipoRapporto Tipologia di rapporto S (KEY) Varchar(50) 13 POLIZZE 
+		x -->
+
+	<tracciatoField>
+		<columnName>TIPORAPPORTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[TipoRapporto]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 7 Controvalore Controvalore in euro della posizione S Number(22,3) 
+		x -->
+
+	<tracciatoField>
+		<columnName>CONTROVALORE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Controvalore]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+	<!-- 8 Divisa CodiceDivisa S Varchar(3) x -->
+
+	<tracciatoField>
+		<columnName>DIVISA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Divisa]]></description>
+		<columnMaxLength>3</columnMaxLength>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+
+
+	<!-- 9 FlagConsolidato Valorizzare a true se il saldo è stato consolidato 
+		S Varchar(1) -->
+
+	<tracciatoField>
+		<columnName>FLAGCONSOLIDATO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[FlagConsolidato]]></description>
+		<columnMaxLength>1</columnMaxLength>
+	</tracciatoField>
+
+
+	<!-- 10 CtvVersato Somma dei versamenti lato cliente S Number(22,3) Utilizzato 
+		per le quadrature -->
+
+	<tracciatoField>
+		<columnName>CTVVERSATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CtvVersato]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 11 CtvPrelevato Somma dei prelievi S Number(22,3) Utilizzato per le 
+		quadrature -->
+
+	<tracciatoField>
+		<columnName>CTVPRELEVATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CtvPrelevato]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+
+	<!-- 12 CtvVersatoNett Differenza tra CtvPrelevato e CtvVersato S Number(22,3) 
+		Utilizzato per le quadrature -->
+
+	<tracciatoField>
+		<columnName>CTVVERSATONETTO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CtvVersatoNetto]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 13 DataAggiornamento Data e ora aggiornamento S Timestamp -->
+
+	<tracciatoField>
+		<columnName>DATAAGGIORNAMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataAggiornamento]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	
+	<!-- PTR-119 -->
+	
+	<!-- 14 CodiceFasciaRendimento -->
+	<tracciatoField>
+		<columnName>CODICEFASCIARENDIMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceFasciaRendimento]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	
+	<!-- 15 DecrizioneFasciaRendimento -->
+	<tracciatoField>
+	
+		<columnName>DECRIZIONEFASCIARENDIMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DecrizioneFasciaRendimento]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	
+	<!-- 16 SerieBuono -->
+	<tracciatoField>
+		<columnName>SERIEBUONO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[SerieBuono]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	
+	<!-- 17 ValoreScadenzaLordo -->
+	<tracciatoField>
+		<columnName>VALORESCADENZALORDO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[ValoreScadenzaLordo]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+	
+	<!-- 18 FlagNettistaLordista -->
+	<tracciatoField>
+		<columnName>FLAGNETTISTALORDISTA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[FlagNettistaLordista]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	
+	<!-- 19 ImportoNetto -->
+	<tracciatoField>
+		<columnName>IMPORTONETTO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[ImportoNetto]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+	
+	<!-- 20 ValoreScadenzaNetto -->
+	<tracciatoField>
+		<columnName>VALORESCADENZANETTO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[ValoreScadenzaNetto]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+	
+	<!-- 21 ValoreNominale -->
+	<tracciatoField>
+		<columnName>VALORENOMINALE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[ValoreNominale]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+	
+	<!-- 22 DataSottoscrizione -->
+	<tracciatoField>
+		<columnName>DATASOTTOSCRIZIONE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataSottoscrizione]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	
+	<!-- 23 DataScadenza -->
+	<tracciatoField>
+		<columnName>DATASCADENZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataScadenza]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+
+</tracciato>

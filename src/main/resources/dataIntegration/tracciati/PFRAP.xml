@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	
+	<tableName>PFRAP</tableName>
+	<importFilePath>%PATH_FLUSSI%/MIFID_Rapporto_LAST.txt</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.model.EdwhReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.EdwhImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>false</skipFirstLine>
+	<maxNumberNoCommit>5000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	
+	<tracciatoField>
+		<columnName>CodiceBanca</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceBanca]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>CodiceRapporto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceRapporto]]></description>
+		<columnMaxLength>200</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>NDG</columnName>
+		<columnType>INT</columnType>
+		<description><![CDATA[NDG]]></description>
+		<columnMaxLength>16</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>	
+	<tracciatoField>
+		<columnName>CodiceAgenzia</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceAgenzia]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>	
+	<tracciatoField>
+		<columnName>TipoRapporto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[TipoRapporto]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>	
+
+	<tracciatoField>
+		<columnName>Perimetro</columnName>
+		<columnType>int</columnType>
+		<description><![CDATA[Perimetro]]></description>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>c_sottorapporto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[c_sottorapporto]]></description>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>ndg_secondario</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[ndg_secondario]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>dt_apertura</columnName>
+		<columnType>int</columnType>
+		<description><![CDATA[dt_apertura]]></description>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>dt_chiusura</columnName>
+		<columnType>int</columnType>
+		<description><![CDATA[dt_chiusura]]></description>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>stato</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[stato]]></description>
+	</tracciatoField>
+	
+<!-- 	<tracciatoField> -->
+<!-- 		<columnName>ID_BUONO_ORIGINARIO</columnName> -->
+<!-- 		<columnType>VARCHAR</columnType> -->
+<!-- 		<description><![CDATA[id_buono_originario]]></description> -->
+<!-- 		<columnMaxLength>50</columnMaxLength> -->
+<!-- 	</tracciatoField> -->
+</tracciato>
+

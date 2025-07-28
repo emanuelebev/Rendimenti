@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFCOSTI_AFB</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_Fondi_Costi_AFB_CONCAT.csv</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName> 
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	<tracciatoField>
+		<columnName>DISTRIBUTOR_CODE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Distributor Code]]></description>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>SUB_DIST_CODE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Sub Distributor Code]]></description>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>RECORD_TYPE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Record Type]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>ACTION</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Action]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>PERIOD_INITIAL_DATE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Inizio]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>PERIOD_FINAL_DATE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Fine]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>SOURCE_CONTRACT</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Rapporto]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>ISIN</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Isin]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>RESERVED1</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Reserved]]></description>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>RESERVED2</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Reserved]]></description>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>RESERVED3</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Reserved]]></description>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CONCEPT</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Concept]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>SIGN_AMT</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Sign Amt]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>AMOUNT</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Costo]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CURRENCY</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Valuta]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>PERCENTAGE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Percentuale]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>SIGN_AMT_CLI</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Segno amount]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>AMOUNT_CURRENCY</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Costo Valuta]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CURRENCY_CLIENT</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Valuta Cliente]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>INFORMATION_FLAG</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Flag informazioni]]></description>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+</tracciato>

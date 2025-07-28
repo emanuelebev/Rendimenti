@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	
+	<tableName>PFSTRUTT</tableName>
+	<importFilePath>%PATH_FLUSSI%/MIFID_Struttura_LAST.txt</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.model.EdwhReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.EdwhImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>false</skipFirstLine>
+	<maxNumberNoCommit>5000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	
+	<tracciatoField>
+		<columnName>CodiceBanca</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceBanca]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>DescrizioneBanca</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DescrizioneBanca]]></description>
+		<columnMaxLength>50</columnMaxLength>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>CodiceAgenzia</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceAgenzia]]></description>
+		<columnMaxLength>15</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>DescrizioneAgenzia</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DescrizioneAgenzia]]></description>
+		<columnMaxLength>500</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>CodiceFiliale</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceFiliale]]></description>
+		<columnMaxLength>5</columnMaxLength>
+	</tracciatoField>	
+
+	<tracciatoField>
+		<columnName>DescrizioneFiliale</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DescrizioneFiliale]]></description>
+		<columnMaxLength>500</columnMaxLength>
+		<obligatory>true</obligatory>
+	</tracciatoField>	
+	
+	<tracciatoField>
+		<columnName>CodiceAreaTerr</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceAreaTerr]]></description>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>DescrizioneAreaTerr</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>50</columnMaxLength>
+		<description><![CDATA[DescrizioneAreaTerr]]></description>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CodiceRegione</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>5</columnMaxLength>
+		<description><![CDATA[CodiceRegione]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>DescrizioneRegione</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>50</columnMaxLength>
+		<description><![CDATA[DescrizioneRegione]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CodiceUfficio</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceUfficio]]></description>
+		<columnMaxLength>50</columnMaxLength>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>TurnoStabileNautilus</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[TurnoStabileNautilus]]></description>
+		<columnMaxLength>50</columnMaxLength>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>Stato</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Stato]]></description>
+		<columnMaxLength>50</columnMaxLength>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>RuoloMaster</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[RuoloMaster]]></description>
+		<columnMaxLength>50</columnMaxLength>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>TipologiaUPCanale</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[TipologiaUPCanale]]></description>
+		<columnMaxLength>50</columnMaxLength>
+	</tracciatoField>
+</tracciato>
+

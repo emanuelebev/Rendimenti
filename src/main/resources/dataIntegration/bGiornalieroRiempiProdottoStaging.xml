@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../job.xsd">
+	<jobName>Impianto fase di staging - Importazione dati banca</jobName>
+	<isThread>false</isThread>
+	<task>
+		<id>1</id>
+		<name>Drop Indexes</name>
+		<sqlProcess>
+		<sql><![CDATA[
+				DECLARE
+				check_ix_codice 				INTEGER:=0;
+				check_ix_tiporapporto			INTEGER:=0;
+				check_ix_codiceinterno			INTEGER:=0;
+				check_ix_codicerapporto			INTEGER:=0;
+				check_ix_mov_g_codrapp			INTEGER:=0;			
+				check_ix_rapporto_pz1			INTEGER:=0;
+		
+				
+		BEGIN
+				SELECT COUNT(*) INTO check_ix_codice FROM user_indexes WHERE index_name = 'IX_MOV_CODICE' AND table_owner = 'RENDIMPC';
+				SELECT COUNT(*) INTO check_ix_tiporapporto FROM user_indexes WHERE index_name = 'IX_MOV_TIPORAPP' AND table_owner = 'RENDIMPC';
+				SELECT COUNT(*) INTO check_ix_codiceinterno FROM user_indexes WHERE index_name = 'IX_MOV_CODINT' AND table_owner = 'RENDIMPC';
+				SELECT COUNT(*) INTO check_ix_codicerapporto FROM user_indexes WHERE index_name = 'IX_MOV_CODRAPP' AND table_owner = 'RENDIMPC';
+				SELECT COUNT(*) INTO check_ix_mov_g_codrapp FROM user_indexes WHERE index_name = 'IX_MOV_G_CODRAPP' AND table_owner = 'RENDIMPC';				
+				SELECT COUNT(*) INTO check_ix_rapporto_pz1 FROM user_indexes WHERE index_name = 'IX_RAPPORTO_PZ1' AND table_owner = 'RENDIMPC';
+		
+			   	IF check_ix_codice = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_CODICE';
+				END IF;
+				IF check_ix_tiporapporto = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_TIPORAPP';
+				END IF;
+				IF check_ix_codiceinterno = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_CODINT';
+				END IF;
+				IF check_ix_codicerapporto = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_CODRAPP';
+				END IF;
+				IF check_ix_mov_g_codrapp = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_MOV_G_CODRAPP';
+				END IF;
+				IF check_ix_rapporto_pz1 = 1 THEN
+					EXECUTE IMMEDIATE 'DROP INDEX RENDIMPC.IX_RAPPORTO_PZ1';
+				END IF;
+			END;]]></sql>
+		</sqlProcess>
+	</task>
+	
+	<task>
+		<id>2</id>
+		<name>Import flussi Riempi Prodotto</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.model.ImportMultiThreadJob</className>
+		
+ 			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PFANANDG.xml</arg>  
+   			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PFPROFILO.xml</arg> 
+  			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PFRAP.xml</arg> 
+   			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PFSALDI.xml</arg>
+  			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PFSTRUTT.xml</arg>
+  			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PFGERARCHIA.xml</arg>	
+  			<arg>%PATH_FASI_XML%/tracciati/giornaliero/PFANATIT.xml</arg>
+            <arg>%PATH_FASI_XML%/tracciati/PFPENTITATIPO.xml</arg>
+		</javaProcess>
+	</task>
+	
+
+</job>

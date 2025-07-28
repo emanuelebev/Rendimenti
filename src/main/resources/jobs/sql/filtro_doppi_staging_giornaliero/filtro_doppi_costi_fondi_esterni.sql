@@ -1,0 +1,38 @@
+DECLARE
+
+CURSOR filtro_costi_fondi_esterni_doppi IS
+	SELECT ROWID
+	FROM (
+		SELECT ROWID,  
+		row_number() OVER (PARTITION BY RECORD_TYPE, ACTION, PERIOD_INITIAL_DATE, PERIOD_FINAL_DATE, SOURCE_CONTRACT, ISIN, CONCEPT, SIGN_AMT, AMOUNT 
+		ORDER BY RECORD_TYPE, ACTION, PERIOD_INITIAL_DATE, PERIOD_FINAL_DATE, SOURCE_CONTRACT, ISIN, CONCEPT, SIGN_AMT, AMOUNT) AS pos
+		FROM TMP_PFCOSTI_AFB
+	) 
+	WHERE pos > 1;
+       
+I NUMBER(38,0):=0;
+
+
+BEGIN
+	
+FOR cur_item IN filtro_costi_fondi_esterni_doppi
+
+	LOOP 			
+	
+	 I := I+1;
+	 
+	DELETE FROM TMP_PFCOSTI_AFB tmp_del
+	WHERE tmp_del.ROWID = cur_item.ROWID;
+					
+	IF MOD(I,10000) = 0 THEN
+		INSERT INTO output_print_table VALUES (to_number(to_char(sysdate,'YYYYMMDDHH24MISS')) || ' FILTRO DOPPI TMP_PFCOSTI_AFB - COMMIT ON ROW: '|| I);
+		COMMIT; 
+	END IF;
+					
+	END LOOP;
+	
+	INSERT INTO output_print_table VALUES (to_number(to_char(sysdate,'YYYYMMDDHH24MISS')) || ' FILTRO DOPPI TMP_PFCOSTI_AFB. RECORD ELIMINATI: '|| I);
+		
+COMMIT;
+
+END;

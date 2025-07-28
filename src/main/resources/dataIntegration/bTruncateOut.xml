@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../job.xsd">
+	
+	<jobName>Truncate OUTPUT_PRINT_TABLE</jobName>
+	<isThread>false</isThread>
+	
+	<task>
+		<id>1</id>
+		<name>TRUNCATE_OUTPUT_PRINT_TABLE</name>
+
+		<sqlProcess>						
+			<sql><![CDATA[
+				--La truncate della tabella viene eseguita il martedì
+			
+				DECLARE
+				
+					I	INTEGER:=0;
+				
+				BEGIN
+				
+				    SELECT TRUNC( sysdate ) - TRUNC( sysdate, 'IW' ) + 1 INTO I FROM DUAL;
+				    
+				    IF I = 2 THEN
+						EXECUTE IMMEDIATE 'TRUNCATE TABLE RENDIMPC.OUTPUT_PRINT_TABLE';
+					END IF;
+					
+					INSERT INTO output_print_table VALUES (to_number(to_char(sysdate,'YYYYMMDDHH24MISS')) || ' -------------------------------------------------- ');
+				
+				END;
+			]]></sql>			
+		</sqlProcess>		
+	</task>
+	
+	<task>
+		<id>2</id>
+		<name>TRUNCATE_REPORT_COSTI_ADMIN_ROLES</name>
+
+		<sqlProcess>						
+			<sql><![CDATA[
+				TRUNCATE TABLE RENDIMPC.REPORT_COSTI_ADMIN_ROLES DROP STORAGE
+			]]></sql>			
+		</sqlProcess>		
+	</task>
+	
+	<task>
+		<id>3</id>
+		<name>TRUNCATE_SECURE_UUID</name>
+
+		<sqlProcess>						
+			<sql><![CDATA[
+				TRUNCATE TABLE RENDIMPC.SECURE_UUID DROP STORAGE
+			]]></sql>			
+		</sqlProcess>		
+	</task>
+
+	<task>
+		<id>4</id>
+		<name>VARIABLE_START_BATCH_DATE</name>
+
+		<sqlProcess>						
+			<sql><![CDATA[
+				DELETE FROM RENDIMPC.CONFIGINI WHERE CODICE = 'START_BATCH'
+			]]></sql>	
+			<sql><![CDATA[
+				INSERT INTO RENDIMPC.CONFIGINI (CODICE, VALORE) VALUES ('START_BATCH', SYSDATE)
+			]]></sql>			
+		</sqlProcess>		
+	</task>
+
+</job>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="../job.xsd">
+
+    <jobName>Bonifica</jobName>
+    <isThread>false</isThread>
+
+    <task>
+        <id>1</id>
+        <name>SWITCH PART_COSTO_MOVIMENTO to COSTO_MOVIMENTO</name>
+        <sqlProcess>
+
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN
+				    SELECT COUNT(*) INTO i FROM user_tables WHERE table_name = 'PART_COSTO_MOVIMENTO';
+				    IF i > 0 THEN
+				        EXECUTE IMMEDIATE 'DROP TABLE COSTO_MOVIMENTO';
+				        EXECUTE IMMEDIATE 'RENAME PART_COSTO_MOVIMENTO TO COSTO_MOVIMENTO';
+				    END IF;
+				END;
+			]]></sql>
+			
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+	            	SELECT COUNT(*) INTO i FROM user_constraints WHERE constraint_name =  'FK_COSTO_MOVIM_TIPO_COSTO';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'ALTER TABLE COSTO_MOVIMENTO ADD CONSTRAINT FK_COSTO_MOVIM_TIPO_COSTO FOREIGN KEY (CODICE_COSTO)
+											REFERENCES TIPO_COSTO (CODICE) ENABLE NOVALIDATE';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+       				SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME =  'IDX_PK_COSTO_MOVIMENTO';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'CREATE INDEX IDX_PK_COSTO_MOVIMENTO ON COSTO_MOVIMENTO (IDRAPPORTO, NUMREG, CODICE_COSTO) NOLOGGING INITRANS 8 PARALLEL 8 LOCAL TABLESPACE TS_RENDIMPC_CMOVS_IDX';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+	            	SELECT COUNT(*) INTO i FROM user_constraints WHERE constraint_name =  'PK_COSTO_MOVIMENTO';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'ALTER TABLE COSTO_MOVIMENTO ADD CONSTRAINT PK_COSTO_MOVIMENTO PRIMARY KEY (IDRAPPORTO, NUMREG, CODICE_COSTO) USING INDEX IDX_PK_COSTO_MOVIMENTO';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			<sql><![CDATA[
+            
+            	DECLARE
+				    i INTEGER;
+				BEGIN	
+       				SELECT COUNT(*) INTO i FROM USER_INDEXES WHERE INDEX_NAME =  'IX_COSTO_MOV_TIPO_COSTO_FK';
+					IF i = 0 THEN
+					    EXECUTE IMMEDIATE 'CREATE INDEX IX_COSTO_MOV_TIPO_COSTO_FK ON COSTO_MOVIMENTO (CODICE_COSTO)  NOLOGGING INITRANS 8 PARALLEL 8';
+					END IF;
+            	END;
+				
+			]]></sql>
+			
+			<sql><![CDATA[
+				ALTER TABLE RENDIMPC.COSTO_MOVIMENTO LOGGING
+			]]></sql>
+			
+			<sql><![CDATA[
+				ALTER TABLE RENDIMPC.MOVIMENTO LOGGING
+			]]></sql>
+			
+			<sql><![CDATA[
+				ALTER TABLE RENDIMPC.SALDO_REND LOGGING
+			]]></sql>
+
+        </sqlProcess>
+    </task>
+
+</job>

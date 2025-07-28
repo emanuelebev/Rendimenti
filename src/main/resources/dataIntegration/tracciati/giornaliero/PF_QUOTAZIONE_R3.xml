@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>QUOTAZIONE_R3</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/BP_QUOTAZIONE_R3_GG_CONCAT.csv</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.RendReaderWarnNoFile</readerClassName> 
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>false</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	<fixWidth>true</fixWidth>
+	
+	<tracciatoField>
+		<columnName>CODICE_PRODOTTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceProdotto]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<fixedStart>0</fixedStart>
+		<fixedEnd>5</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CODICE_FONDO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceFondo]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>5</fixedStart>
+		<fixedEnd>7</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>DESCRIZIONE_FONDO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DescrizioneFondo]]></description>
+		<columnMaxLength>1000</columnMaxLength>
+		<fixedStart>7</fixedStart>
+		<fixedEnd>1007</fixedEnd>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>DATA_RIFERIMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataRiferimento]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>1007</fixedStart>
+		<fixedEnd>1015</fixedEnd>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>VALORE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Valore]]></description>
+		<columnMaxLength>22</columnMaxLength>
+		<fixedStart>1015</fixedStart>
+		<fixedEnd>1037</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	
+</tracciato>

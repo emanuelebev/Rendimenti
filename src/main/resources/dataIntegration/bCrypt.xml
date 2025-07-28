@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="job.xsd">
+	<jobName>CRYPT INTESTAZIONI</jobName>
+	<isThread>false</isThread>
+	<task>
+		<id>1</id>
+		<name>CRYPT INTESTAZIONI</name>
+		<sqlProcess>
+			
+			<sql><![CDATA[		
+					UPDATE /*+PARALLEL*/ TMP_PFANANDG SET
+					DENOMINAZIONE='XXXXXXX XXXXXXXX', NOME='XXXXXXX', 
+					COGNOME='XXXXXXX', CODICEFISCALE='XXXXXXXXXXXXXXXX', 
+					INDIRIZZORESIDENZA='INDIRIZZO RESIDENZA', LUOGODINASCITA='LUOGONASCITA',
+					COMUNERESIDENZA='COMUNE RESIDENZA'
+			]]></sql>
+			
+			<sql><![CDATA[
+				COMMIT
+			]]></sql>
+				
+	</sqlProcess>
+	</task>
+	
+</job>
+
+
+
+	

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	
+	<tableName>PFSALDI</tableName>
+	<importFilePath>%PATH_FLUSSI%/MIFID_Saldi_LAST.txt</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.model.EdwhReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.EdwhImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>false</skipDropTable>
+	<skipFirstLine>false</skipFirstLine>
+	<maxNumberNoCommit>5000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	
+	<tracciatoField>
+		<columnName>CodiceBanca</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceBanca]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CodiceAgenzia</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceAgenzia]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>CodiceRapporto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceRapporto]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>CodiceInterno</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceInterno]]></description>
+		<columnMaxLength>24</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>DataSaldo</columnName>
+		<columnType>int</columnType>
+		<description><![CDATA[DataSaldo]]></description>
+	</tracciatoField>	
+
+	<tracciatoField>
+		<columnName>TipoRapporto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[TipoRapporto]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>	
+	
+	<tracciatoField>
+		<columnName>DataSottoscrizione</columnName>
+		<columnType>int</columnType>
+		<description><![CDATA[DataSottoscrizione]]></description>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>DataScadenza</columnName>
+		<columnType>int</columnType>
+		<description><![CDATA[DataScadenza]]></description>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>Quantita</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Quantita]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>Controvalore</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Controvalore]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>CodiceRischio</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceRischio]]></description>
+		<columnMaxLength>24</columnMaxLength>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>PREZZO_MEDIO_CARICO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[PREZZO_MEDIO_CARICO]]></description>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>CAMBIO_MEDIO_CARICO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CAMBIO_MEDIO_CARICO]]></description>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>CONTROVALORE_VINCOLATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CtvVinc]]></description>
+	</tracciatoField>
+	
+</tracciato>
+

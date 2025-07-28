@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job>
+  <name>TEMP_RAPPORTO</name>
+    <description/>
+    <extended_description/>
+    <job_version/>
+    <job_status>0</job_status>
+  <directory>&#x2f;</directory>
+  <created_user>-</created_user>
+  <created_date>2018&#x2f;09&#x2f;06 12&#x3a;16&#x3a;47.270</created_date>
+  <modified_user>-</modified_user>
+  <modified_date>2018&#x2f;09&#x2f;06 12&#x3a;16&#x3a;47.270</modified_date>
+    <parameters>
+    </parameters>
+  <slaveservers>
+    </slaveservers>
+<job-log-table><connection/>
+<schema/>
+<table>job_log_table</table>
+<size_limit_lines>4000</size_limit_lines>
+<interval/>
+<timeout_days/>
+<field><id>ID_JOB</id><enabled>Y</enabled><name>ID_JOB</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>JOBNAME</id><enabled>Y</enabled><name>JOBNAME</name></field><field><id>STATUS</id><enabled>Y</enabled><name>STATUS</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>STARTDATE</id><enabled>Y</enabled><name>STARTDATE</name></field><field><id>ENDDATE</id><enabled>Y</enabled><name>ENDDATE</name></field><field><id>LOGDATE</id><enabled>Y</enabled><name>LOGDATE</name></field><field><id>DEPDATE</id><enabled>Y</enabled><name>DEPDATE</name></field><field><id>REPLAYDATE</id><enabled>Y</enabled><name>REPLAYDATE</name></field><field><id>LOG_FIELD</id><enabled>Y</enabled><name>LOG_FIELD</name></field><field><id>EXECUTING_SERVER</id><enabled>N</enabled><name>EXECUTING_SERVER</name></field><field><id>EXECUTING_USER</id><enabled>N</enabled><name>EXECUTING_USER</name></field><field><id>START_JOB_ENTRY</id><enabled>Y</enabled><name>START_JOB_ENTRY</name></field><field><id>CLIENT</id><enabled>N</enabled><name>CLIENT</name></field></job-log-table>
+<jobentry-log-table><connection/>
+<schema/>
+<table>job_entry_log_table</table>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>LOG_DATE</id><enabled>Y</enabled><name>LOG_DATE</name></field><field><id>JOBNAME</id><enabled>Y</enabled><name>TRANSNAME</name></field><field><id>JOBENTRYNAME</id><enabled>Y</enabled><name>STEPNAME</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>RESULT</id><enabled>Y</enabled><name>RESULT</name></field><field><id>NR_RESULT_ROWS</id><enabled>Y</enabled><name>NR_RESULT_ROWS</name></field><field><id>NR_RESULT_FILES</id><enabled>Y</enabled><name>NR_RESULT_FILES</name></field><field><id>LOG_FIELD</id><enabled>Y</enabled><name>LOG_FIELD</name></field><field><id>COPY_NR</id><enabled>Y</enabled><name>COPY_NR</name></field></jobentry-log-table>
+<channel-log-table><connection/>
+<schema/>
+<table>logging_channel_log_table</table>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>LOG_DATE</id><enabled>Y</enabled><name>LOG_DATE</name></field><field><id>LOGGING_OBJECT_TYPE</id><enabled>Y</enabled><name>LOGGING_OBJECT_TYPE</name></field><field><id>OBJECT_NAME</id><enabled>Y</enabled><name>OBJECT_NAME</name></field><field><id>OBJECT_COPY</id><enabled>Y</enabled><name>OBJECT_COPY</name></field><field><id>REPOSITORY_DIRECTORY</id><enabled>Y</enabled><name>REPOSITORY_DIRECTORY</name></field><field><id>FILENAME</id><enabled>Y</enabled><name>FILENAME</name></field><field><id>OBJECT_ID</id><enabled>Y</enabled><name>OBJECT_ID</name></field><field><id>OBJECT_REVISION</id><enabled>Y</enabled><name>OBJECT_REVISION</name></field><field><id>PARENT_CHANNEL_ID</id><enabled>Y</enabled><name>PARENT_CHANNEL_ID</name></field><field><id>ROOT_CHANNEL_ID</id><enabled>Y</enabled><name>ROOT_CHANNEL_ID</name></field></channel-log-table>
+   <pass_batchid>Y</pass_batchid>
+   <shared_objects_file/>
+  <entries>
+    <entry>
+      <name>START</name>
+      <description/>
+      <type>SPECIAL</type>
+      <start>Y</start>
+      <dummy>N</dummy>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <hour>12</hour>
+      <minutes>0</minutes>
+      <weekDay>1</weekDay>
+      <DayOfMonth>1</DayOfMonth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>144</xloc>
+      <yloc>48</yloc>
+      </entry>
+    <entry>
+      <name>Success</name>
+      <description/>
+      <type>SUCCESS</type>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>480</xloc>
+      <yloc>304</yloc>
+      </entry>
+    <entry>
+      <name>TEMP_RAPPORTO</name>
+      <description/>
+      <type>SQL</type>
+      <sql>TRUNCATE TABLE TEMP_RAPPORTO DROP STORAGE&#x3b;&#xa;&#xa;TRUNCATE TABLE TEMP_DELTARAPPORTO DROP STORAGE&#x3b;&#xa;&#xa;INSERT &#x2f;&#x2a;&#x2b;APPEND NOLOGGING PARALLEL&#x28;TEMP_RAPPORTO,8&#x29;&#x2a;&#x2f; INTO TEMP_RAPPORTO &#x28;CODICEBANCA,CODICERAPPORTO,NDG,CODICEAGENZIA,TIPORAPPORTO,PERIMETRO,C_SOTTORAPPORTO,NDG_SECONDARIO,DT_APERTURA,DT_CHIUSURA,STATO&#x29;&#xa;&#xa;SELECT CODICEBANCA,CODICERAPPORTO, NDG, CODICEAGENZIA, TIPORAPPORTO,  PERIMETRO, C_SOTTORAPPORTO, NDG_SECONDARIO, DT_APERTURA, DT_CHIUSURA, STATO&#xa;FROM TMP_PFRAP T&#xa;WHERE EXISTS &#x28;SELECT 1 FROM TEMP_CLIENTE C WHERE T.NDG&#x3d;C.NDG&#x29;&#x3b;&#xa;</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;sql&#x2f;riempi_prodotto&#x2f;temp_rapporto.sql</sqlfilename>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>db-connection</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>176</yloc>
+      </entry>
+    <entry>
+      <name>TEMP_RAPPORTO PK</name>
+      <description/>
+      <type>SQL</type>
+      <sql>DECLARE&#xa;    i INTEGER&#x3b;&#xa;BEGIN&#xa;    SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM USER_CONSTRAINTS WHERE CONSTRAINT_NAME &#x3d; &#x27;TEMP_RAPPORTO_PK&#x27;&#x3b;&#xa;    IF i &#x3d;0 THEN&#xa;        EXECUTE IMMEDIATE &#x27;ALTER TABLE TEMP_RAPPORTO ADD CONSTRAINT TEMP_RAPPORTO_PK PRIMARY KEY &#x28;NDG,CODICERAPPORTO,CODICEAGENZIA,TIPORAPPORTO&#x29; USING INDEX TABLESPACE RENDIMPC_INDEX &#x27;&#x3b;&#xa;        EXECUTE IMMEDIATE &#x27;ALTER INDEX TEMP_RAPPORTO_PK NOPARALLEL&#x27;&#x3b;&#xa;    END IF&#x3b;&#xa;&#xa;    dbms_stats.gather_table_stats&#x28;ownname &#x3d;&#x3e; sys_context&#x28;&#x27;USERENV&#x27;, &#x27;CURRENT_SCHEMA&#x27;&#x29;, tabname &#x3d;&#x3e; &#x27;TEMP_RAPPORTO&#x27;, degree &#x3d;&#x3e; 4, estimate_percent&#x3d;&#x3e;1&#x29;&#x3b;&#xa;    &#xa;END&#x3b;&#xa;&#xa;</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;sql&#x2f;riempi_prodotto&#x2f;temp_rapporto_pk.sql</sqlfilename>
+      <sendOneStatement>T</sendOneStatement>
+      <connection>db-connection</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>304</yloc>
+      </entry>
+    <entry>
+      <name>PRE_INDEX_RAPPORTO</name>
+      <description/>
+      <type>SQL</type>
+      <sql>DECLARE i INTEGER&#x3b;&#xa;&#xa;BEGIN&#xa;	&#xa;SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;TEMP_RAP_IDX_TIPO&#x27;&#x3b;&#xa;IF i &#x3d; 0 THEN&#xa;    EXECUTE IMMEDIATE &#x27;CREATE INDEX RENDIMPC.TEMP_RAP_IDX_TIPO ON TMP_PFRAP&#x28;TIPORAPPORTO&#x29; TABLESPACE RENDIMPC_INDEX&#x27;&#x3b;&#xa;END IF&#x3b;&#xa;&#xa;&#xa;SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;TEMP_RAP_IDX_BUONO&#x27;&#x3b;&#xa;IF i &#x3d; 0 THEN&#xa;    EXECUTE IMMEDIATE &#x27;CREATE INDEX RENDIMPC.TEMP_RAP_IDX_BUONO ON TMP_PFRAP&#x28;ID_BUONO_ORIGINARIO&#x29; TABLESPACE RENDIMPC_INDEX&#x27;&#x3b;&#xa;END IF&#x3b;&#xa;&#xa;dbms_stats.gather_table_stats&#x28;ownname &#x3d;&#x3e; sys_context&#x28;&#x27;USERENV&#x27;, &#x27;CURRENT_SCHEMA&#x27;&#x29;, tabname &#x3d;&#x3e; &#x27;TMP_PFRAP&#x27;, degree &#x3d;&#x3e; 4, estimate_percent&#x3d;&#x3e;1&#x29;&#x3b;&#xa;   &#xa;&#xa;END&#x3b;&#xa;&#xa;&#xa;&#xa;</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;sql&#x2f;riempi_prodotto&#x2f;pre_index_rapporto.sql</sqlfilename>
+      <sendOneStatement>T</sendOneStatement>
+      <connection>db-connection</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>48</yloc>
+      </entry>
+  </entries>
+  <hops>
+    <hop>
+      <from>TEMP_RAPPORTO</from>
+      <to>TEMP_RAPPORTO PK</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>START</from>
+      <to>PRE_INDEX_RAPPORTO</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>PRE_INDEX_RAPPORTO</from>
+      <to>TEMP_RAPPORTO</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>TEMP_RAPPORTO PK</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+  </hops>
+  <notepads>
+  </notepads>
+
+</job>

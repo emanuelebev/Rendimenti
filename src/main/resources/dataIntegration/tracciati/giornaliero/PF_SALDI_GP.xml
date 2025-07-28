@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	
+	<tableName>PFSALDI_GP</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_GPM_Saldi_CONCAT.csv</importFilePath>
+	<!-- Note Il file ha il formato definito da poste vita. Attenzione: è un
+		file posizionale a lunghezza fissa, e c'è sia un record di testa che un record 
+		di coda. I numeri hanno '.' come separatore dei DOUBLEi Le date hanno formato 
+		AAAAMMGG -->
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<skipDropTable>true</skipDropTable> 
+	<skipFirstLine>false</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>false</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	<fixWidth>true</fixWidth>
+
+	<tracciatoField>
+		<columnName>NUMERO_DEPOSITO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Numero deposito]]></description>
+		<columnMaxLength>12</columnMaxLength>
+		<fixedStart>0</fixedStart>
+		<fixedEnd>12</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>NUMERO_SOTTODEPOSITO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Numero sottodeposito]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<fixedStart>12</fixedStart>
+		<fixedEnd>17</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CODICETITOLO_INTERNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice titolo interno]]></description>
+		<columnMaxLength>12</columnMaxLength>
+		<fixedStart>17</fixedStart>
+		<fixedEnd>29</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>IMPORTO_CONCORDATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Importo Concordato]]></description>
+		<columnMaxLength>19</columnMaxLength>   <!-- per via del segno ho dovuto mettere 19 -->
+		<fixedStart>29</fixedStart>
+		<fixedEnd>48</fixedEnd>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>DATA_SALDO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data di riferimento saldo]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>48</fixedStart>
+		<fixedEnd>56</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>	
+	<tracciatoField>
+		<columnName>QUANTITA</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Quantita]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>56</fixedStart>
+		<fixedEnd>75</fixedEnd>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CTV_CARICO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Controvalore di carico]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>75</fixedStart>
+		<fixedEnd>94</fixedEnd>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CTV_MERCATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Controvalore di mercato]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>94</fixedStart>
+		<fixedEnd>113</fixedEnd>
+		<obligatory>true</obligatory>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>PORTAFOGLIO_ID</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[PORTAFOGLIO_ID]]></description>
+		<columnMaxLength>36</columnMaxLength>
+		<fixedStart>113</fixedStart>
+		<fixedEnd>149</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+</tracciato>

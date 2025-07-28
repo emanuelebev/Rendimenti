@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFMOVIMENTI</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_EDWH_Movimenti_CONCAT.csv</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+
+	<tracciatoField>
+		<columnName>CODICEBANCA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceBanca]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CODICE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice]]></description>
+		<columnMaxLength>255</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CODICEAGENZIA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceAgenzia]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CODICERAPPORTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceRapporto]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+
+	<tracciatoField>
+		<columnName>TIPORAPPORTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>2</columnMaxLength>
+		<description><![CDATA[Tipo rapporto]]></description>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!--"Tipo rapporto: 01 CONTI CORRENTI 02 LIBRETTI 03 BPF 13 POLIZZE 14 FONDI 
+		15 TITOLI" -->
+
+	<tracciatoField>
+		<columnName>CODICEINTERNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>255</columnMaxLength>
+		<description><![CDATA[CodiceInterno]]></description>
+		<!-- <obligatory>true</obligatory> -->
+		<!-- <tableKey>true</tableKey> -->
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CAUSALE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Causale]]></description>
+		<columnMaxLength>255</columnMaxLength>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CTVREGOLATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CtvRegolato]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CTVMERCATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CtvMercato]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CTVREGOLATODIVISA</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CtvRegolatoDivisa]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CTVMERCATODIVISA</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CtvMercatoDivisa]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+
+	<tracciatoField>
+		<columnName>DIVISA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Divisa]]></description>
+		<columnMaxLength>3</columnMaxLength>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+	<!--Codice ISO della divisa originaria del movimento (es. EUR) -->
+
+
+	<tracciatoField>
+		<columnName>QUANTITA</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Quantita]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+		<!--<obligatory>true</obligatory> Obbligatorio solo per prodotti in quote -->
+	</tracciatoField>
+
+	<!--I prezzi di questo flusso sono utilizzati per i dettagli del movimento -->
+
+	<tracciatoField>
+		<columnName>PREZZOMERCATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[PrezzoMercato]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+
+	<!--15 Prezzo utilizzato per il calcolo del CTV mercato (prezzo tel quel 
+		nel caso di obbligazioni) Obbligatoria per prodotti in quote -->
+
+	<tracciatoField>
+		<columnName>PREZZO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Prezzo]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!--16 RateoLordo Rateo lordo del movimento N N Number(22,3) -->
+
+	<tracciatoField>
+		<columnName>RATEOLORDO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[RateoLordo]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+
+	<!-- 17 RateoNetto Rateo netto del movimento N N Number(22,3) -->
+
+	<tracciatoField>
+		<columnName>RATEONETTO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[RateoNetto]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+
+	<!-- 18 Cambio Cambio del movimento N S Number(22,3) x Fisso 1 Fisso 1 x 
+		x x -->
+
+	<tracciatoField>
+		<columnName>CAMBIO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Cambio]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 19 DataOrdine Data dell'ordine N S Data x x x x x x x x x -->
+
+	<tracciatoField>
+		<columnName>DATAORDINE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataOrdine]]></description>
+	</tracciatoField>
+
+	<!-- 20 DataContabile Data contabile. Per fondi e sicav contiene la data 
+		di regolamento N S Data E' la data di eseguito x x x x x x x x -->
+
+	<tracciatoField>
+		<columnName>DATACONTABILE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataContabile]]></description>
+	</tracciatoField>
+
+
+	<!-- 21 DataValuta Data valuta S S Data 18/05/2018 Se non disponibile in 
+		alternativa il sistema può utilizzare la data contabile Da approfondire quale 
+		data valuta utilizzare x ( deve essere la medesima dei saldi/saldi storici) 
+		x x x x -->
+
+	<tracciatoField>
+		<columnName>DATAVALUTA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataValuta]]></description>
+	</tracciatoField>
+
+	<!-- 22 FlagStorno Indica se il movimento è un movimento di storno. Impostare 
+		a '1' se movimento di storno, a '0' altrimenti N N Varchar(1) x x Fondi non 
+		storna movimenti x x x x x -->
+
+	<tracciatoField>
+		<columnName>FLAGSTORNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[FlagStorno]]></description>
+		<columnMaxLength>1</columnMaxLength>
+	</tracciatoField>
+
+	<!-- 23 CodiceStorno Codice del movimento da stornare / annullare. C N Varchar(255) 
+		Il campo deve essere valorizzato solo se FlagStorno =1 Obbligatorio solo 
+		se il FlagStorno = 1 Obbligatorio solo se il FlagStorno = 1 vedi sopra Obbligatorio 
+		solo se il FlagStorno = 1 x ( solo per storno di sportello ) no - non c'è 
+		correlazione con il movimento stornato - ci si può risalire cmq ma senza 
+		un codice univoco diretto x x -->
+
+	<tracciatoField>
+		<columnName>CODICESTORNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceStorno]]></description>
+		<columnMaxLength>255</columnMaxLength>
+	</tracciatoField>
+
+	<!-- 24 FlagCancellato Valorizzato a '1' se il movimento deve essere cancellato 
+		dalla base dati N N Varchar(1) In alcuni sistemi i movimenti non vengono 
+		stornati ma cancellati Fondi non cancella movimenti -->
+
+	<tracciatoField>
+		<columnName>FLAGCANCELLATO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[FlagCancellato]]></description>
+		<columnMaxLength>1</columnMaxLength>
+	</tracciatoField>
+
+
+	<!-- 25 Imposte Imposte C N Number(22,3) Solo per quadratura rispetto al 
+		flusso costi dei movimenti x x x x x x x -->
+
+	<tracciatoField>
+		<columnName>IMPOSTE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Imposte]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 26 Commissioni Commissioni C N Number(22,3) Solo per quadratura rispetto 
+		al flusso costi dei movimenti x x x x x x -->
+
+	<tracciatoField>
+		<columnName>COMMISSIONI</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Commissioni]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 28 DataAggiornamento Data aggiornamento S N Timestamp Formato aaaa-mm-gg 
+		xx:yy:zz x x x x -->
+
+	<tracciatoField>
+		<columnName>DATAAGGIORNAMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataAggiornamento]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>IMPOSTA_REST</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Imposta di bollo restituita BFP]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+</tracciato>

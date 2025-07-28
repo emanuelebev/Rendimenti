@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFMOV_SWPRIVATE</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/BP_SWITCH_PRIVATE_GG_CONCAT.csv</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.RendReaderWarnNoFile</readerClassName> 
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	<fixWidth>true</fixWidth>
+
+	<tracciatoField>
+		<columnName>NUMERO_POLIZZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[NumeroPolizza]]></description>
+		<fixedStart>0</fixedStart>
+		<fixedEnd>11</fixedEnd>
+		<columnMaxLength>11</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>FONDO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Fondo]]></description>
+		<fixedStart>11</fixedStart>
+		<fixedEnd>13</fixedEnd>
+		<columnMaxLength>2</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>DATA_NAV</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataNav]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>13</fixedStart>
+		<fixedEnd>21</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>ISIN</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Isin]]></description>
+		<columnMaxLength>12</columnMaxLength>
+		<fixedStart>21</fixedStart>
+		<fixedEnd>33</fixedEnd>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>TIPO_MOVIMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[TipoMovimento]]></description>
+		<columnMaxLength>16</columnMaxLength>
+		<fixedStart>33</fixedStart>
+		<fixedEnd>49</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>NAV</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Nav]]></description>
+		<columnMaxLength>22</columnMaxLength>
+		<fixedStart>49</fixedStart>
+		<fixedEnd>71</fixedEnd>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>QUOTE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Quote]]></description>
+		<columnMaxLength>22</columnMaxLength>
+		<fixedStart>71</fixedStart>
+		<fixedEnd>93</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>IMPORTO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Importo]]></description>
+		<columnMaxLength>22</columnMaxLength>
+		<fixedStart>93</fixedStart>
+		<fixedEnd>115</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>COD_LINEA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice linea]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>115</fixedStart>
+		<fixedEnd>117</fixedEnd>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>DATA_MOV</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data movimento]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>117</fixedStart>
+		<fixedEnd>125</fixedEnd>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>COD_UNIVERSO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice prodotto]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<fixedStart>125</fixedStart>
+		<fixedEnd>130</fixedEnd>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>COSTO_ETF</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Costo ETF]]></description>
+		<columnMaxLength>22</columnMaxLength>
+		<fixedStart>130</fixedStart>
+		<fixedEnd>152</fixedEnd>
+	</tracciatoField>
+</tracciato>

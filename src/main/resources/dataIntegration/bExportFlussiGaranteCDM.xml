@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="job.xsd">
+	<jobName>Esportazione Flussi Garante Privacy CDM</jobName>
+	<isThread>false</isThread>
+	<task>
+		<id>1</id>
+		<name>Create index</name>
+		<sqlProcess>
+			<sql>
+			    <![CDATA[
+			        DECLARE
+			            I INTEGER;
+			        BEGIN
+			            SELECT COUNT(*) INTO I FROM USER_INDEXES WHERE INDEX_NAME = 'PRIVACY_LOG_GOV_IDX';
+			        	IF I = 0 THEN
+			            	EXECUTE IMMEDIATE 'CREATE INDEX PRIVACY_LOG_GOV_IDX ON RENDIMPC.PRIVACY_LOG_GOV(DATA)';
+			        	END IF;
+			        END;
+			    ]]>
+			</sql>
+			<sql>
+				<![CDATA[
+    				COMMIT
+   				]]>
+   			</sql>
+		</sqlProcess>
+	</task>
+	<task>
+		<id>2</id>
+		<name>Esporta Tabella Log Privacy</name>
+		<exportProcess>
+			<sql>
+    			<![CDATA[
+			       SELECT DISTINCT
+			           PL.TIPO_OPERAZIONE,
+			           TO_CHAR(PL.DATA,'YYYY-MM-DD HH24:MI:SS') AS TS,
+			           NVL(PL.UTENTE,''),
+			           NVL(PL.ETICHETTA_CLIENTE,''),
+			           (CASE WHEN PL.ETICHETTA_CLIENTE = 'NDG' THEN LPAD(NVL(PL.CLIENTE,''),12,'0') ELSE PL.CLIENTE END),
+			           NVL(PL.TERMINALE,''),
+			           NVL (PL.TIPO_RAPPORTO,''),
+			           NVL(PL.COD_OPERAZIONE,''),
+			           NVL(PL.DESC_OPERAZIONE,''),
+			           NVL (PL.FRAZIONARIO,''),
+			           NVL(PL.ETICHETTA_RAPPORTO,''),
+			           NVL(PL.VALORE_RAPPORTO,''),
+			           NVL (PL.TIPO_IMPORTO,''),
+			           NVL(PL.STATO_OPERAZIONE,''),
+			           NVL(PL.ETICHETTA_VAL_AGG1,''),
+			           NVL (PL.VAL_AGG1,''),
+			           NVL(PL.ETICHETTA_VAL_AGG2,''),
+			           NVL(PL.VAL_AGG2,''),
+			           NVL(PL.ETICHETTA_VAL_AGG3 ,''),
+			           NVL(PL.VAL_AGG3,'') AS VAL_AGG3,
+			           NVL(PL.NATURA_GIURIDICA,'')
+			       FROM
+			           RENDIMPC.PRIVACY_LOG_GOV PL
+			       WHERE
+			           TRUNC(PL.DATA)  >= TRUNC(TO_DATE(%systemProps[EXTRACT_START]%,'YYYYMMDD'))
+			           AND TRUNC(PL.DATA) < TRUNC(TO_DATE(%systemProps[EXTRACT_END]%,'YYYYMMDD'))
+			       ORDER BY TS ASC
+			    ]]>
+			</sql>
+			<visualizzaHeader>true</visualizzaHeader>
+			<fixedHeader><![CDATA[AA%systemProps[EXTRACT_START]%PK-01498000001]]></fixedHeader>
+			<visualizzaFooter>false</visualizzaFooter>
+			<fixedFooter><![CDATA[]]>
+			</fixedFooter>
+			<exportType>
+				<cvs>
+					<fieldSeparator>|</fieldSeparator>
+					<printNull>false</printNull>
+				</cvs>
+			</exportType>
+			<exportPath>/opt/POSTE/appo_file/exportFlussiGarante</exportPath>
+			<exportFileName>%systemProps[GARANTE_FILENAME_PREFIX]%_%systemProps[EXTRACT_START]%_%systemProps[ACTUAL_HM]%</exportFileName>
+			<exportExtension>txt</exportExtension>
+			<addTimeStampToName>false</addTimeStampToName>
+			<locale>IT</locale>
+			<numberPattern>###.##################</numberPattern>
+		</exportProcess>
+	</task>
+	<task>
+		<id>3</id>
+		<name>Esporta Coda Tabella Log Privacy</name>
+		<exportProcess>
+			<sql>
+			    <![CDATA[
+			        SELECT
+			            'ZZ',
+			            '%systemProps[EXTRACT_START]%',
+			            'PK-01498',
+			            LPAD(COUNT(*)+2,15,'0')
+			        FROM
+			            (
+			                SELECT DISTINCT
+			                    PL.TIPO_OPERAZIONE,
+			                    TO_CHAR(PL.DATA,'YYYY-MM-DD HH24:MI:SS'),
+			                    NVL(PL.UTENTE,''),
+			                    NVL (PL.ETICHETTA_CLIENTE,''),
+			                    (CASE WHEN PL.ETICHETTA_CLIENTE = 'NDG' THEN LPAD(NVL(PL.CLIENTE,''),12,'0') ELSE PL.CLIENTE END),
+			                    NVL(PL.TERMINALE,''),
+			                    NVL (PL.TIPO_RAPPORTO,''),
+			                    NVL(PL.COD_OPERAZIONE,''),
+			                    NVL(PL.DESC_OPERAZIONE,''),
+			                    NVL (PL.FRAZIONARIO,''),
+			                    NVL(PL.ETICHETTA_RAPPORTO,''),
+			                    NVL(PL.VALORE_RAPPORTO,''),
+			                    NVL (PL.TIPO_IMPORTO,''),
+			                    NVL(PL.STATO_OPERAZIONE,''),
+			                    NVL(PL.ETICHETTA_VAL_AGG1,''),
+			                    NVL (PL.VAL_AGG1,''),
+			                    NVL(PL.ETICHETTA_VAL_AGG2,''),
+			                    NVL(PL.VAL_AGG2,''),
+			                    NVL(PL.ETICHETTA_VAL_AGG3 ,''),
+			                    NVL(PL.VAL_AGG3,'') AS VAL_AGG3,
+			                    NVL(PL.NATURA_GIURIDICA,'')
+			                FROM
+			                    RENDIMPC.PRIVACY_LOG_GOV PL
+			                WHERE
+			                    TRUNC(PL.DATA)  >= TRUNC(TO_DATE(%systemProps[EXTRACT_START]%,'YYYYMMDD'))
+			                    AND TRUNC(PL.DATA) < TRUNC(TO_DATE(%systemProps[EXTRACT_END]%,'YYYYMMDD')))
+			    ]]>
+			</sql>
+			<visualizzaHeader>false</visualizzaHeader>
+			<fixedHeader><![CDATA[]]>
+			</fixedHeader>
+			<visualizzaFooter>false</visualizzaFooter>
+			<fixedFooter><![CDATA[]]>
+			</fixedFooter>
+			<exportType>
+				<cvs>
+					<fieldSeparator></fieldSeparator>
+					<printNull>false</printNull>
+				</cvs>
+			</exportType>
+			<exportPath>/opt/POSTE/appo_file/exportFlussiGarante</exportPath>
+			<exportFileName>Gar_AP_coda</exportFileName>
+			<exportExtension>txt</exportExtension>
+			<addTimeStampToName>false</addTimeStampToName>
+			<locale>IT</locale>
+			<numberPattern>###.##################</numberPattern>
+		</exportProcess>
+	</task>
+	<task>
+		<id>4</id>
+		<name>Move to history older than 15gg</name>
+		<sqlProcess>
+			<sql>
+			    <![CDATA[
+			        INSERT
+			        	INTO RENDIMPC.PRIVACY_LOG_GOV_HISTORY (
+			            	ID,
+			                TIPO_OPERAZIONE,
+			                DATA,
+			                UTENTE,
+			                ETICHETTA_CLIENTE,
+			                CLIENTE,
+			                TERMINALE,
+			                FRAZIONARIO,
+			                TIPO_RAPPORTO,
+			                ETICHETTA_RAPPORTO,
+			                VALORE_RAPPORTO,
+			                TIPO_IMPORTO,
+			                COD_OPERAZIONE,
+			                DESC_OPERAZIONE,
+			                STATO_OPERAZIONE,
+			                ETICHETTA_VAL_AGG1,
+			                VAL_AGG1,
+			                ETICHETTA_VAL_AGG2,
+			                VAL_AGG2,
+			                ETICHETTA_VAL_AGG3,
+			                VAL_AGG3,
+			                NATURA_GIURIDICA
+			            )
+			            SELECT
+			            	ID,
+			                TIPO_OPERAZIONE,
+			                DATA,
+			                UTENTE,
+			                ETICHETTA_CLIENTE,
+			                CLIENTE,
+			                TERMINALE,
+			                FRAZIONARIO,
+			                TIPO_RAPPORTO,
+			                ETICHETTA_RAPPORTO,
+			                VALORE_RAPPORTO,
+			                TIPO_IMPORTO,
+			                COD_OPERAZIONE,
+			                DESC_OPERAZIONE,
+			                STATO_OPERAZIONE,
+			                ETICHETTA_VAL_AGG1,
+			                VAL_AGG1,
+			                ETICHETTA_VAL_AGG2,
+			                VAL_AGG2,
+			                ETICHETTA_VAL_AGG3,
+			                VAL_AGG3,
+			                NATURA_GIURIDICA
+			            FROM
+			                RENDIMPC.PRIVACY_LOG_GOV
+			            WHERE
+			                DATA < TRUNC(TO_DATE(%systemProps[EXTRACT_START]%,'YYYYMMDD')-%LOG_PRIVACY_ELAPSED_HISTORY%)
+			
+			    ]]>
+			</sql>
+			<sql>
+			    <![CDATA[
+			        DELETE FROM
+			            RENDIMPC.PRIVACY_LOG_GOV
+			        WHERE
+			            DATA < TRUNC(TO_DATE(%systemProps[EXTRACT_START]%,'YYYYMMDD')-%LOG_PRIVACY_ELAPSED_HISTORY%)
+			    ]]>
+			</sql>
+			<sql>
+				<![CDATA[
+    				COMMIT
+   				]]>
+   			</sql>
+		</sqlProcess>
+	</task>
+	<task>
+		<id>5</id>
+		<name>delete index</name>
+		<sqlProcess>
+			<sql>
+			    <![CDATA[
+			        DECLARE I INTEGER;
+			        BEGIN SELECT COUNT(*) INTO I FROM USER_INDEXES WHERE INDEX_NAME = 'PRIVACY_LOG_GOV_IDX';
+			            IF I > 0 THEN
+			                EXECUTE IMMEDIATE 'DROP INDEX PRIVACY_LOG_GOV_IDX';
+			            END IF;
+			        END;
+			    ]]>
+			</sql>
+			<sql>
+				<![CDATA[
+    				COMMIT
+   				]]>
+   			</sql>
+		</sqlProcess>
+	</task>
+</job>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFCOSTI_SERV</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_Titoli_CostiServizio_CONCAT.csv</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	
+	<!-- 1 CodiceBanca Codice della banca o dell’intermediario finanziario a 
+		cui afferisce l’NDG S (KEY) Varchar(5) Nel caso non sia prevista una codifica 
+		distinta per Banche / Intermediari appertenenti al Gruppo, puo’ essere valorizzato 
+		un unico codice rappresentativo. Ad es. 7601 non sono previsti costi non 
+		sono previsti costi -->
+
+	<tracciatoField>
+		<columnName>CodiceBanca</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceBanca]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 2 CodiceCliente Codice cliente S (KEY) Varchar -->
+
+	<tracciatoField>
+		<columnName>CodiceCliente</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceCliente]]></description>
+		<!-- TODO <columnMaxLength>5</columnMaxLength> -->
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 3 CodiceMovimento Codice univoco del movimento di costi S (KEY) Varchar(50) -->
+
+	<tracciatoField>
+		<columnName>CodiceMovimento</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceMovimento]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+
+	<!-- 4 CodiceCosto CodiceCosto come da dominio dei costi S (KEY) Varchar(50) -->
+
+	<tracciatoField>
+		<columnName>CodiceCosto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceCosto]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+
+	<!-- 5 CodiceAgenzia Codice del’agenzia della banca o dell’intermediario 
+		finanziario a cui afferisce il rapporto N Varchar(5) -->
+
+	<tracciatoField>
+		<columnName>CodiceAgenzia</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceAgenzia]]></description>
+		<columnMaxLength>5</columnMaxLength>
+	</tracciatoField>
+
+	<!-- 6 CodiceRapporto Codice alfanumerico del rapporto N VarchR(50) -->
+
+	<tracciatoField>
+		<columnName>CodiceRapporto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceRapporto]]></description>
+		<columnMaxLength>50</columnMaxLength>
+	</tracciatoField>
+
+	<!-- 7 TipoRapporto Tipologia del rapporto N Varchar(2) 02 LIBRETTI 03 BPF 
+		13 POLIZZE 14 FONDI 15 TITOLI -->
+
+	<tracciatoField>
+		<columnName>TipoRapporto</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[TipoRapporto]]></description>
+		<columnMaxLength>2</columnMaxLength>
+	</tracciatoField>
+
+	<!-- 8 DataContabile Data contabile. Per i movimenti relativi a Fondi e 
+		SICAV, contiene la data di regolamento S (KEY) Data -->
+
+	<tracciatoField>
+		<columnName>DataContabile</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataContabile]]></description>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 9 DataValuta Data valuta S Data -->
+
+	<tracciatoField>
+		<columnName>DataValuta</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataValuta]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+	<!-- 10 DataDa Data di inizio del costo N Data -->
+
+	<tracciatoField>
+		<columnName>DataDa</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataDa]]></description>
+	</tracciatoField>
+
+	<!-- 11 DataA Data di fine del costo N Data -->
+
+	<tracciatoField>
+		<columnName>DataA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataA]]></description>
+	</tracciatoField>
+
+
+	<!-- 12 Importo Importo del costo in EURO S Number (22,3) -->
+
+	<tracciatoField>
+		<columnName>Importo</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Importo]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+
+	<!-- 13 DataAggiornamento Data e ora aggiornamento S Timestamp -->
+
+	<tracciatoField>
+		<columnName>DataAggiornamento</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataAggiornamento]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+</tracciato>

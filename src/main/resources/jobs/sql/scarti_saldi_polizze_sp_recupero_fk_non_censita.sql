@@ -1,0 +1,477 @@
+DECLARE
+
+--Saldi polizze monoramo
+CURSOR SCARTI_SALDI_POLIZZE_MONO IS
+	SELECT  /*+ parallel(8) */ R.codicerapporto AS r_codicerapporto, sf.codicetitolo AS sf_codicetitolo, sp.ROWID, sp.* 
+	FROM TMP_PFSALPOSP_RECUP sp
+		LEFT JOIN ( SELECT X.* 
+					FROM tbl_bridge X 
+					INNER JOIN strumentofinanziario y 
+						ON X.codicetitolo = y.codicetitolo) b
+			ON b.cod_universo = sp.codiceinterno
+				AND (b.cod_linea = sp.codiceinternomacroprodotto OR 
+					(b.cod_linea IS NULL AND sp.codiceinternomacroprodotto IS NULL))
+		LEFT JOIN strumentofinanziario sf
+			ON sf.codicetitolo = sp.codiceinterno
+		LEFT JOIN rapporto R
+			ON R.codicerapporto = lpad(TRIM(sp.codicerapporto),12,'0')
+			AND R.tipo = '13'
+		WHERE b.codicetitolo IS NULL
+		AND sf.livello_2 = 'POLIZZE RAMO I' 
+		AND sp.flagesclusione = '0'
+		AND R.ID IS NULL;
+
+	
+--Saldi polizze multiramo
+CURSOR SCARTI_SALDI_POLIZZE_MULTI IS
+	SELECT  /*+ parallel(8) */ R.codicerapporto AS r_codicerapporto, sf.codicetitolo AS sf_codicetitolo, sp.ROWID, sp.* 
+	FROM TMP_PFSALPOSP_RECUP sp
+		LEFT JOIN ( SELECT X.* 
+					FROM tbl_bridge X 
+					INNER JOIN strumentofinanziario y 
+						ON X.codicetitolo = y.codicetitolo) b
+			ON b.cod_universo = sp.codiceinterno
+				AND (b.cod_linea = sp.codiceinternomacroprodotto OR 
+					(b.cod_linea IS NULL AND sp.codiceinternomacroprodotto IS NULL))
+		LEFT JOIN strumentofinanziario sf
+			ON sf.codicetitolo = sp.codiceinterno
+		LEFT JOIN rapporto R
+			ON R.codicerapporto = lpad(TRIM(sp.codicerapporto),12,'0')
+				AND R.tipo = '13'
+	WHERE sp.flagesclusione = '0'
+	AND (b.codicetitolo IS NOT NULL OR sf.livello_2 IN ('POLIZZE UNIT LINKED', 'POLIZZE INDEX LINKED'))
+	AND R.ID IS NULL;
+
+	
+--Saldi polizze tuttoilresto
+CURSOR SCARTI_SALDI_POLIZZE_ALTRO IS
+	SELECT  /*+ parallel(8) */ R.codicerapporto AS r_codicerapporto, CASE WHEN b.codicetitolo IS NOT NULL THEN b.codicetitolo
+		ELSE sf.codicetitolo END AS sf_codicetitolo, sp.ROWID, sp.* 
+	FROM TMP_PFSALPOSP_RECUP sp
+		LEFT JOIN ( SELECT X.* 
+					FROM tbl_bridge X 
+					INNER JOIN strumentofinanziario y 
+						ON X.codicetitolo = y.codicetitolo) b
+			ON b.cod_universo = sp.codiceinterno
+				AND (b.cod_linea = sp.codiceinternomacroprodotto OR 
+					(b.cod_linea IS NULL AND sp.codiceinternomacroprodotto IS NULL))
+		LEFT JOIN strumentofinanziario sf
+			ON sf.codicetitolo = sp.codiceinterno
+		LEFT JOIN rapporto R
+			ON R.codicerapporto = lpad(TRIM(sp.codicerapporto),12,'0')
+			AND R.tipo = '13'
+		WHERE ((b.codicetitolo IS NULL AND (sf.codicetitolo IS NULL OR (sf.livello_2 NOT IN  ('POLIZZE RAMO I', 'POLIZZE UNIT LINKED', 'POLIZZE INDEX LINKED'))))
+			OR  R.ID IS NULL)
+		AND sp.flagesclusione = '0';
+	
+	
+I 							NUMBER(38,0):=0;	
+SCARTI_CODICETITOLO 		NUMBER:=0;
+SCARTI_CODICERAPPORTO 		NUMBER:=0;
+
+
+BEGIN
+		
+	FOR CUR_ITEM IN SCARTI_SALDI_POLIZZE_MONO
+		LOOP 
+					
+		I := I+1;
+		
+			IF (CUR_ITEM.SF_CODICETITOLO IS NULL) THEN			
+				INSERT INTO 
+					TBL_SCARTI_TMP_PFSALPOSP_RECUP (CODICEBANCA,
+													CODICEAGENZIA,
+													CODICERAPPORTO,
+													CODICEINTERNO,
+													RAMO,
+													FONDO,
+													DATASALDO,
+													TIPORAPPORTO,
+													CONTROVALORE,
+													DIVISA,
+													FLAGCONSOLIDATO,
+													CTVVERSATO,
+													CTVPRELEVATO,
+													CTVVERSATONETTO,
+													DATAAGGIORNAMENTO,
+													CODICEINTERNOMACROPRODOTTO,
+													DESCRIZIONEMACROPRODOTTO,
+													VALORENOMINALE,
+													DATACOMPLEANNOPOLIZZA,
+													IDTITOLO,
+													FLAGESCLUSIONE,
+													TMSTP,
+													MOTIVO_SCARTO,
+													RIPROPONIBILE   
+													)
+									VALUES (CUR_ITEM.CODICEBANCA,       
+											CUR_ITEM.CODICEAGENZIA,     
+											CUR_ITEM.CODICERAPPORTO,    
+											CUR_ITEM.CODICEINTERNO,
+											CUR_ITEM.RAMO,
+											CUR_ITEM.FONDO,
+											CUR_ITEM.DATASALDO,
+											CUR_ITEM.TIPORAPPORTO,
+											CUR_ITEM.CONTROVALORE,
+											CUR_ITEM.DIVISA,
+											CUR_ITEM.FLAGCONSOLIDATO,
+											CUR_ITEM.CTVVERSATO,
+											CUR_ITEM.CTVPRELEVATO,
+											CUR_ITEM.CTVVERSATONETTO,
+											CUR_ITEM.DATAAGGIORNAMENTO,
+											CUR_ITEM.CODICEINTERNOMACROPRODOTTO,
+											CUR_ITEM.DESCRIZIONEMACROPRODOTTO,
+											CUR_ITEM.VALORENOMINALE,
+											CUR_ITEM.DATACOMPLEANNOPOLIZZA,
+											CUR_ITEM.IDTITOLO,
+											CUR_ITEM.FLAGESCLUSIONE,
+											SYSDATE,             
+											'MONORAMO - CHIAVE ESTERNA "CODICETITOLO" NON CENSITA',     
+											'S'
+											);
+										
+					DELETE FROM TMP_PFSALPOSP_RECUP TMP_DEL
+					WHERE TMP_DEL.ROWID = CUR_ITEM.ROWID;
+					
+					SCARTI_CODICETITOLO := SCARTI_CODICETITOLO +1;
+				
+				ELSIF (CUR_ITEM.R_CODICERAPPORTO IS NULL) THEN
+					INSERT INTO 
+						TBL_SCARTI_TMP_PFSALPOSP_RECUP (CODICEBANCA,
+														CODICEAGENZIA,
+														CODICERAPPORTO,
+														CODICEINTERNO,
+														RAMO,
+														FONDO,
+														DATASALDO,
+														TIPORAPPORTO,
+														CONTROVALORE,
+														DIVISA,
+														FLAGCONSOLIDATO,
+														CTVVERSATO,
+														CTVPRELEVATO,
+														CTVVERSATONETTO,
+														DATAAGGIORNAMENTO,
+														CODICEINTERNOMACROPRODOTTO,
+														DESCRIZIONEMACROPRODOTTO,
+														VALORENOMINALE,
+														DATACOMPLEANNOPOLIZZA,
+														IDTITOLO,
+														FLAGESCLUSIONE,
+														TMSTP,
+														MOTIVO_SCARTO,
+														RIPROPONIBILE   
+														)
+										VALUES (CUR_ITEM.CODICEBANCA,       
+												CUR_ITEM.CODICEAGENZIA,     
+												CUR_ITEM.CODICERAPPORTO,    
+												CUR_ITEM.CODICEINTERNO,
+												CUR_ITEM.RAMO,
+												CUR_ITEM.FONDO,
+												CUR_ITEM.DATASALDO,
+												CUR_ITEM.TIPORAPPORTO,
+												CUR_ITEM.CONTROVALORE,
+												CUR_ITEM.DIVISA,
+												CUR_ITEM.FLAGCONSOLIDATO,
+												CUR_ITEM.CTVVERSATO,
+												CUR_ITEM.CTVPRELEVATO,
+												CUR_ITEM.CTVVERSATONETTO,
+												CUR_ITEM.DATAAGGIORNAMENTO,
+												CUR_ITEM.CODICEINTERNOMACROPRODOTTO,
+												CUR_ITEM.DESCRIZIONEMACROPRODOTTO,
+												CUR_ITEM.VALORENOMINALE,
+												CUR_ITEM.DATACOMPLEANNOPOLIZZA,
+												CUR_ITEM.IDTITOLO,
+												CUR_ITEM.FLAGESCLUSIONE,
+												SYSDATE, 
+												'MONORAMO - CHIAVE ESTERNA "CODICERAPPORTO" NON CENSITA',     
+												'S'
+												);
+													
+							DELETE FROM TMP_PFSALPOSP_RECUP TMP_DEL
+							WHERE TMP_DEL.ROWID = CUR_ITEM.ROWID;
+							
+							SCARTI_CODICERAPPORTO := SCARTI_CODICERAPPORTO +1;			
+					END IF;
+			
+			IF MOD(I,10000) = 0 THEN
+				INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP MONO PER CHIAVE ESTERNA NON CENSITA - COMMIT ON ROW: '|| I);
+				COMMIT; 
+			END IF;
+					
+		END LOOP;
+			 INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP MONO PER CHIAVE ESTERNA NON CENSITA. RECORD ELABORATI: '|| I);
+			 INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP MONO PER CODICETITOLO NON CENSITO. RECORD SCARTATI: '|| SCARTI_CODICETITOLO);
+			 INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP MONO PER CODICERAPPORTO NON CENSITO. RECORD SCARTATI: '|| SCARTI_CODICERAPPORTO);
+		COMMIT;
+		
+		I := 0;	
+		
+	FOR CUR_ITEM IN SCARTI_SALDI_POLIZZE_MULTI
+		LOOP 
+				
+		I := I+1;
+		
+			IF (CUR_ITEM.SF_CODICETITOLO IS NULL) THEN			
+				INSERT INTO 
+					TBL_SCARTI_TMP_PFSALPOSP_RECUP (CODICEBANCA,
+													CODICEAGENZIA,
+													CODICERAPPORTO,
+													CODICEINTERNO,
+													RAMO,
+													FONDO,
+													DATASALDO,
+													TIPORAPPORTO,
+													CONTROVALORE,
+													DIVISA,
+													FLAGCONSOLIDATO,
+													CTVVERSATO,
+													CTVPRELEVATO,
+													CTVVERSATONETTO,
+													DATAAGGIORNAMENTO,
+													CODICEINTERNOMACROPRODOTTO,
+													DESCRIZIONEMACROPRODOTTO,
+													VALORENOMINALE,
+													DATACOMPLEANNOPOLIZZA,
+													IDTITOLO,
+													FLAGESCLUSIONE,
+													TMSTP,
+													MOTIVO_SCARTO,
+													RIPROPONIBILE   
+													)
+									VALUES (CUR_ITEM.CODICEBANCA,       
+											CUR_ITEM.CODICEAGENZIA,     
+											CUR_ITEM.CODICERAPPORTO,    
+											CUR_ITEM.CODICEINTERNO,
+											CUR_ITEM.RAMO,
+											CUR_ITEM.FONDO,
+											CUR_ITEM.DATASALDO,
+											CUR_ITEM.TIPORAPPORTO,
+											CUR_ITEM.CONTROVALORE,
+											CUR_ITEM.DIVISA,
+											CUR_ITEM.FLAGCONSOLIDATO,
+											CUR_ITEM.CTVVERSATO,
+											CUR_ITEM.CTVPRELEVATO,
+											CUR_ITEM.CTVVERSATONETTO,
+											CUR_ITEM.DATAAGGIORNAMENTO,
+											CUR_ITEM.CODICEINTERNOMACROPRODOTTO,
+											CUR_ITEM.DESCRIZIONEMACROPRODOTTO,
+											CUR_ITEM.VALORENOMINALE,
+											CUR_ITEM.DATACOMPLEANNOPOLIZZA,
+											CUR_ITEM.IDTITOLO,
+											CUR_ITEM.FLAGESCLUSIONE,
+											SYSDATE,             
+											'MULTIRAMO - CHIAVE ESTERNA "CODICETITOLO" NON CENSITA',     
+											'S'
+											);
+										
+					DELETE FROM TMP_PFSALPOSP_RECUP TMP_DEL
+					WHERE TMP_DEL.ROWID = CUR_ITEM.ROWID;
+					
+					SCARTI_CODICETITOLO := SCARTI_CODICETITOLO +1;
+				
+				ELSIF (CUR_ITEM.R_CODICERAPPORTO IS NULL) THEN
+					INSERT INTO 
+						TBL_SCARTI_TMP_PFSALPOSP_RECUP (CODICEBANCA,
+														CODICEAGENZIA,
+														CODICERAPPORTO,
+														CODICEINTERNO,
+														RAMO,
+														FONDO,
+														DATASALDO,
+														TIPORAPPORTO,
+														CONTROVALORE,
+														DIVISA,
+														FLAGCONSOLIDATO,
+														CTVVERSATO,
+														CTVPRELEVATO,
+														CTVVERSATONETTO,
+														DATAAGGIORNAMENTO,
+														CODICEINTERNOMACROPRODOTTO,
+														DESCRIZIONEMACROPRODOTTO,
+														VALORENOMINALE,
+														DATACOMPLEANNOPOLIZZA,
+														IDTITOLO,
+														FLAGESCLUSIONE,
+														TMSTP,
+														MOTIVO_SCARTO,
+														RIPROPONIBILE   
+														)
+										VALUES (CUR_ITEM.CODICEBANCA,       
+												CUR_ITEM.CODICEAGENZIA,     
+												CUR_ITEM.CODICERAPPORTO,    
+												CUR_ITEM.CODICEINTERNO,
+												CUR_ITEM.RAMO,
+												CUR_ITEM.FONDO,
+												CUR_ITEM.DATASALDO,
+												CUR_ITEM.TIPORAPPORTO,
+												CUR_ITEM.CONTROVALORE,
+												CUR_ITEM.DIVISA,
+												CUR_ITEM.FLAGCONSOLIDATO,
+												CUR_ITEM.CTVVERSATO,
+												CUR_ITEM.CTVPRELEVATO,
+												CUR_ITEM.CTVVERSATONETTO,
+												CUR_ITEM.DATAAGGIORNAMENTO,
+												CUR_ITEM.CODICEINTERNOMACROPRODOTTO,
+												CUR_ITEM.DESCRIZIONEMACROPRODOTTO,
+												CUR_ITEM.VALORENOMINALE,
+												CUR_ITEM.DATACOMPLEANNOPOLIZZA,
+												CUR_ITEM.IDTITOLO,
+												CUR_ITEM.FLAGESCLUSIONE,
+												SYSDATE, 
+												'MULTIRAMO - CHIAVE ESTERNA "CODICERAPPORTO" NON CENSITA',     
+												'S'
+												);
+													
+							DELETE FROM TMP_PFSALPOSP_RECUP TMP_DEL
+							WHERE TMP_DEL.ROWID = CUR_ITEM.ROWID;
+							
+							SCARTI_CODICERAPPORTO := SCARTI_CODICERAPPORTO +1;			
+					END IF;
+			
+			IF MOD(I,10000) = 0 THEN
+				INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP MULTI PER CHIAVE ESTERNA NON CENSITA - COMMIT ON ROW: '|| I);
+				COMMIT; 
+			END IF;
+					
+		END LOOP;
+			 INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP MULTI PER CHIAVE ESTERNA NON CENSITA. RECORD ELABORATI: '|| I);
+			 INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP MULTI PER CODICETITOLO NON CENSITO. RECORD SCARTATI: '|| SCARTI_CODICETITOLO);
+			 INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP MULTI PER CODICERAPPORTO NON CENSITO. RECORD SCARTATI: '|| SCARTI_CODICERAPPORTO);
+		COMMIT;
+		
+		I :=0;
+		
+		FOR CUR_ITEM IN SCARTI_SALDI_POLIZZE_ALTRO
+		LOOP 
+					
+		I := I+1;
+		
+			IF (CUR_ITEM.R_CODICERAPPORTO IS NULL) THEN			
+				INSERT INTO 
+					TBL_SCARTI_TMP_PFSALPOSP_RECUP (CODICEBANCA,
+													CODICEAGENZIA,
+													CODICERAPPORTO,
+													CODICEINTERNO,
+													RAMO,
+													FONDO,
+													DATASALDO,
+													TIPORAPPORTO,
+													CONTROVALORE,
+													DIVISA,
+													FLAGCONSOLIDATO,
+													CTVVERSATO,
+													CTVPRELEVATO,
+													CTVVERSATONETTO,
+													DATAAGGIORNAMENTO,
+													CODICEINTERNOMACROPRODOTTO,
+													DESCRIZIONEMACROPRODOTTO,
+													VALORENOMINALE,
+													DATACOMPLEANNOPOLIZZA,
+													IDTITOLO,
+													FLAGESCLUSIONE,
+													TMSTP,
+													MOTIVO_SCARTO,
+													RIPROPONIBILE   
+													)
+									VALUES (CUR_ITEM.CODICEBANCA,       
+											CUR_ITEM.CODICEAGENZIA,     
+											CUR_ITEM.CODICERAPPORTO,    
+											CUR_ITEM.CODICEINTERNO,
+											CUR_ITEM.RAMO,
+											CUR_ITEM.FONDO,
+											CUR_ITEM.DATASALDO,
+											CUR_ITEM.TIPORAPPORTO,
+											CUR_ITEM.CONTROVALORE,
+											CUR_ITEM.DIVISA,
+											CUR_ITEM.FLAGCONSOLIDATO,
+											CUR_ITEM.CTVVERSATO,
+											CUR_ITEM.CTVPRELEVATO,
+											CUR_ITEM.CTVVERSATONETTO,
+											CUR_ITEM.DATAAGGIORNAMENTO,
+											CUR_ITEM.CODICEINTERNOMACROPRODOTTO,
+											CUR_ITEM.DESCRIZIONEMACROPRODOTTO,
+											CUR_ITEM.VALORENOMINALE,
+											CUR_ITEM.DATACOMPLEANNOPOLIZZA,
+											CUR_ITEM.IDTITOLO,
+											CUR_ITEM.FLAGESCLUSIONE,
+											SYSDATE,             
+											'POLIZZE - CHIAVE ESTERNA "CODICERAPPORTO" NON CENSITA',     
+											'S'
+											);
+										
+					DELETE FROM TMP_PFSALPOSP_RECUP TMP_DEL
+					WHERE TMP_DEL.ROWID = CUR_ITEM.ROWID;
+					
+					SCARTI_CODICETITOLO := SCARTI_CODICETITOLO +1;
+				
+				ELSE
+					INSERT INTO 
+						TBL_SCARTI_TMP_PFSALPOSP_RECUP (CODICEBANCA,
+														CODICEAGENZIA,
+														CODICERAPPORTO,
+														CODICEINTERNO,
+														RAMO,
+														FONDO,
+														DATASALDO,
+														TIPORAPPORTO,
+														CONTROVALORE,
+														DIVISA,
+														FLAGCONSOLIDATO,
+														CTVVERSATO,
+														CTVPRELEVATO,
+														CTVVERSATONETTO,
+														DATAAGGIORNAMENTO,
+														CODICEINTERNOMACROPRODOTTO,
+														DESCRIZIONEMACROPRODOTTO,
+														VALORENOMINALE,
+														DATACOMPLEANNOPOLIZZA,
+														IDTITOLO,
+														FLAGESCLUSIONE,
+														TMSTP,
+														MOTIVO_SCARTO,
+														RIPROPONIBILE   
+														)
+										VALUES (CUR_ITEM.CODICEBANCA,       
+												CUR_ITEM.CODICEAGENZIA,     
+												CUR_ITEM.CODICERAPPORTO,    
+												CUR_ITEM.CODICEINTERNO,
+												CUR_ITEM.RAMO,
+												CUR_ITEM.FONDO,
+												CUR_ITEM.DATASALDO,
+												CUR_ITEM.TIPORAPPORTO,
+												CUR_ITEM.CONTROVALORE,
+												CUR_ITEM.DIVISA,
+												CUR_ITEM.FLAGCONSOLIDATO,
+												CUR_ITEM.CTVVERSATO,
+												CUR_ITEM.CTVPRELEVATO,
+												CUR_ITEM.CTVVERSATONETTO,
+												CUR_ITEM.DATAAGGIORNAMENTO,
+												CUR_ITEM.CODICEINTERNOMACROPRODOTTO,
+												CUR_ITEM.DESCRIZIONEMACROPRODOTTO,
+												CUR_ITEM.VALORENOMINALE,
+												CUR_ITEM.DATACOMPLEANNOPOLIZZA,
+												CUR_ITEM.IDTITOLO,
+												CUR_ITEM.FLAGESCLUSIONE,
+												SYSDATE, 
+												'POLIZZE - IMPOSSIBILE RICONOSCERE LO STRUMENTO',       
+												'S'
+												);
+													
+							DELETE FROM TMP_PFSALPOSP_RECUP TMP_DEL
+							WHERE TMP_DEL.ROWID = CUR_ITEM.ROWID;
+							
+							SCARTI_CODICETITOLO := SCARTI_CODICETITOLO +1;		
+					END IF;
+			
+			IF MOD(I,10000) = 0 THEN
+				INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP ALTRO PER CHIAVE ESTERNA NON CENSITA - COMMIT ON ROW: '|| I);
+				COMMIT; 
+			END IF;
+					
+		END LOOP;
+			 INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP ALTRO PER CHIAVE ESTERNA NON CENSITA. RECORD ELABORATI: '|| I);
+			 INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP ALTRO IMPOSSIBILE RICONOSCERE LO STRUMENTO. RECORD SCARTATI: '|| SCARTI_CODICETITOLO);
+			 INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' SCARTI TMP_PFSALPOSP_RECUP ALTRO PER CODICERAPPORTO NON CENSITO. RECORD SCARTATI: '|| SCARTI_CODICERAPPORTO);
+		COMMIT;
+	END;

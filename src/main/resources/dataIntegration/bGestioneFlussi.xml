@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="job.xsd">
+	<jobName>GESTIONE FLUSSI</jobName>
+	<isThread>false</isThread>
+	
+	<task>
+		<id>1</id>
+		<name>CONCAT FLUSSO SALDI</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussi</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>/Users/gigantep/Desktop/POSTE/FLUSSI/RENDIMENTI/LAST/POLIZZE/20190122_FlussiRecuperoPV/</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>RECUP_BP_PAGAMENTI_GG_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>true</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>RECUP_BP_PAGAMENTI.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>/Users/gigantep/Desktop/POSTE/FLUSSI/RENDIMENTI/LAST/POLIZZE/OUTPUT_CONCAT_FLUSSI/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+</job>
+
+
+
+	

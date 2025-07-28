@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFCOSTI</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_EDWH_CostiMovimenti_CONCAT.csv</importFilePath>
+	<!--sftp://pfpsvil@wam-pfp-svil-11/opt/POSTE/PFP_App/PFPbatchRendimenti/ini/dataIntegration/flussi/EDWH_20180926/ESTRAZIONE%20COSTI%20MOVIMENTI%20x%20FONDI.txt -->
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	
+	<!-- 1 CodiceBanca Codice della banca o dell’intermediario finanziario a 
+		cui afferisce l’NDG. Se non rilevante può essere valorizzato con un unico 
+		codice (es. 7601 come in PCG) S (KEY) Varchar Nel caso non sia prevista una 
+		codifica distinta per Banche / Intermediari appertenenti al Gruppo, puo’ 
+		essere valorizzato un unico codice rappresentativo. Ad es. 7601 non sono 
+		previsti costi non sono previsti costi x -->
+
+	<tracciatoField>
+		<columnName>CODICEBANCA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceBanca]]></description>
+		<!-- TODO <columnMaxLength>50</columnMaxLength> -->
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 2 CodiceMovimento Codice del movimento a cui la voce di costo ( commissioni, 
+		oneri, incentivi, tasse) si riferisce. S (KEY) Varchar x -->
+
+
+	<tracciatoField>
+		<columnName>CODICEMOVIMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceMovimento]]></description>
+		<!-- TODO <columnMaxLength>3</columnMaxLength> -->
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+
+	<!-- 3 CodiceCosto Codice del costo come da dominio dei costi (vedi foglio 
+		DOMINIO COMM e INCENT) S (KEY) Varchar x -->
+	<tracciatoField>
+		<columnName>CODICECOSTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceCosto]]></description>
+		<!-- TODO <columnMaxLength>3</columnMaxLength> -->
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 4 Importo Importo del costo in EURO S Double x -->
+
+	<tracciatoField>
+		<columnName>IMPORTO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Importo]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+
+	<!-- 5 Fonte Identificativo del verticale/procedura che genera il costo. 
+		Utile a fine informativo N Varchar -->
+	<tracciatoField>
+		<columnName>FONTE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Fonte]]></description>
+		<!-- TODO <columnMaxLength>3</columnMaxLength> -->
+	</tracciatoField>
+
+
+	<!-- 6 Tipo rapporto 01 CONTI CORRENTI 02 LIBRETTI 03 BPF 13 POLIZZE 14 
+		FONDI 15 TITOLI S Varchar(2) 04/07/2018 Necessario per creare la chiave composta 
+		del movimento -->
+
+	<tracciatoField>
+		<columnName>TIPORAPPORTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<columnMaxLength>2</columnMaxLength>
+		<description><![CDATA[Tipo rapporto]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+
+	<!-- 7 DataAggiornamento Data e ora di aggiornamento S TimeStamp x -->
+
+	<tracciatoField>
+		<columnName>DATAAGGIORNAMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataAggiornamento]]></description>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+</tracciato>

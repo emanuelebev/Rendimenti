@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../job.xsd">
+
+	<jobName>Bonifica</jobName>
+	<isThread>false</isThread>
+
+	<task>
+		<id>1</id>
+		<name>CREATE TABLE PART_COSTO_MOVIMENTO and COPY DATA</name>
+
+		<sqlProcess>
+
+			<sql><![CDATA[
+				CREATE TABLE PART_COSTO_MOVIMENTO
+					(
+						CODICE_BANCA VARCHAR2(5 BYTE) NOT NULL ENABLE, 
+						CODICE_COSTO VARCHAR2(50 BYTE) NOT NULL ENABLE, 
+						IDRAPPORTO NUMBER NOT NULL ENABLE, 
+						NUMREG VARCHAR2(256 BYTE) NOT NULL ENABLE, 
+						IMPORTO FLOAT(126), 
+						TIPO_FONTE VARCHAR2(50 BYTE), 
+						DATA_DA NUMBER, 
+						DATA_A NUMBER, 
+						SSA VARCHAR2(8 BYTE), 
+						DATA_AGGIORNAMENTO DATE,
+						CONSTRAINT FK_COSTO_MOVIM_MOVIMENTO FOREIGN KEY(IDRAPPORTO, NUMREG)
+							REFERENCES MOVIMENTO(IDRAPPORTO, NUMREG) ON DELETE CASCADE
+					) 
+					PCTFREE 30
+					PARTITION BY REFERENCE (FK_COSTO_MOVIM_MOVIMENTO)
+					(
+						partition CMOV_01 tablespace TS_RENDIMPC_CMOVS_01,
+						partition CMOV_02 tablespace TS_RENDIMPC_CMOVS_02,
+						partition CMOV_03 tablespace TS_RENDIMPC_CMOVS_03,
+						partition CMOV_04 tablespace TS_RENDIMPC_CMOVS_04,
+						partition CMOV_05 tablespace TS_RENDIMPC_CMOVS_05,
+						partition CMOV_06 tablespace TS_RENDIMPC_CMOVS_06,
+						partition CMOV_07 tablespace TS_RENDIMPC_CMOVS_07,
+						partition CMOV_08 tablespace TS_RENDIMPC_CMOVS_08,
+						partition CMOV_09 tablespace TS_RENDIMPC_CMOVS_09,
+						partition CMOV_10 tablespace TS_RENDIMPC_CMOVS_10,
+						partition CMOV_11 tablespace TS_RENDIMPC_CMOVS_11,
+						partition CMOV_12 tablespace TS_RENDIMPC_CMOVS_12,
+						partition CMOV_13 tablespace TS_RENDIMPC_CMOVS_13,
+						partition CMOV_14 tablespace TS_RENDIMPC_CMOVS_14,
+						partition CMOV_15 tablespace TS_RENDIMPC_CMOVS_15,
+						partition CMOV_16 tablespace TS_RENDIMPC_CMOVS_16,
+						partition CMOV_17 tablespace TS_RENDIMPC_CMOVS_17,
+						partition CMOV_18 tablespace TS_RENDIMPC_CMOVS_18,
+						partition CMOV_19 tablespace TS_RENDIMPC_CMOVS_19,
+						partition CMOV_20 tablespace TS_RENDIMPC_CMOVS_20 
+					)
+			]]></sql>
+			
+			<sql><![CDATA[
+				ALTER TABLE RENDIMPC.PART_COSTO_MOVIMENTO NOLOGGING
+			]]></sql>
+			
+			<sql><![CDATA[
+				ALTER TABLE RENDIMPC.MOVIMENTO NOLOGGING
+			]]></sql>
+			
+			<sql><![CDATA[
+				ALTER TABLE RENDIMPC.SALDO_REND NOLOGGING
+			]]></sql>
+			
+			<sql><![CDATA[
+				BEGIN
+					EXECUTE IMMEDIATE 'ALTER SESSION ENABLE PARALLEL DML';
+					EXECUTE IMMEDIATE 'ALTER SESSION ENABLE PARALLEL QUERY';
+					EXECUTE IMMEDIATE 'ALTER SESSION SET PARALLEL_FORCE_LOCAL=FALSE';
+				END;
+ 			]]></sql>
+			
+			<sql><![CDATA[
+				INSERT /*+ APPEND NOLOGGING PARALLEL (20) */ INTO PART_COSTO_MOVIMENTO
+				SELECT /*+ PARALLEL(20) */ * FROM COSTO_MOVIMENTO
+			]]></sql>
+
+		</sqlProcess>
+	</task>
+
+</job>

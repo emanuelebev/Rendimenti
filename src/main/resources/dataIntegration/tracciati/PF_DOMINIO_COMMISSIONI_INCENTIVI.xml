@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="tracciato.xsd">
+    <tableName>PFDOMINIO_COMMISSIONI_INCENTIVI</tableName>
+    <importFilePath>%PATH_FLUSSI_1%/REND_Titoli_Commissioni.csv</importFilePath>
+    <importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+    <locale>US</locale>
+    <deliminatore>;</deliminatore>
+    <skipDropTable>true</skipDropTable>
+    <skipFirstLine>false</skipFirstLine>
+    <maxNumberNoCommit>8000</maxNumberNoCommit>
+    <strongFieldTypeCheck>true</strongFieldTypeCheck>
+    <writeScartiOnDB>true</writeScartiOnDB>
+    <createTblScarti>false</createTblScarti>
+    <!--
+    1	CodiceBanca	codice della banca o dell’intermediario finanziario a cui afferisce l’NDG	S (KEY)	Varchar  (5)
+-->
+
+    <tracciatoField>
+        <columnName>CodiceBanca</columnName>
+        <columnType>VARCHAR</columnType>
+        <description><![CDATA[CodiceBanca]]></description>
+        <columnMaxLength>5</columnMaxLength>
+        <obligatory>true</obligatory>
+        <tableKey>true</tableKey>
+    </tracciatoField>
+
+    <!--
+    2	CodiceCosto	Codice univoco che identifica la commissione o voce di costo	S (KEY)
+    -->
+
+    <tracciatoField>
+        <columnName>CodiceCosto</columnName>
+        <columnType>VARCHAR</columnType>
+        <description><![CDATA[CodiceCosto]]></description>
+        <!-- TODO <columnMaxLength>3</columnMaxLength> -->
+        <obligatory>true</obligatory>
+        <tableKey>true</tableKey>
+    </tracciatoField>
+
+    <!--
+    3	Descrizione	Descrizione della voce di costo 	S
+    -->
+
+    <tracciatoField>
+        <columnName>Descrizione</columnName>
+        <columnType>VARCHAR</columnType>
+        <description><![CDATA[Descrizione]]></description>
+        <!-- TODO <columnMaxLength>3</columnMaxLength> -->
+        <obligatory>true</obligatory>
+    </tracciatoField>
+
+
+    <!--
+    4	CodiceCategoria	Il dominio delle categorie deve essere condiviso.  Una possibile categorizzazione è quella indicata dall'Annex II  001 - “OneOff” – “Una tantum” 002 - “OnGoing” – “Ricorrenti” 003 - “Transactions” – “Costi di transazione 004 - “Ancillary services” – Costi servizi accessori 005 - “Incidental” – Costi incidentali	S
+    -->
+
+    <tracciatoField>
+        <columnName>CodiceCategoria</columnName>
+        <columnType>VARCHAR</columnType>
+        <description><![CDATA[CodiceCategoria]]></description>
+        <!-- TODO <columnMaxLength>3</columnMaxLength> -->
+        <obligatory>true</obligatory>
+    </tracciatoField>
+
+
+    <!--
+    5	DataAggiornamento	Data e ora di aggiornamento	S	TimeStamp
+-->
+
+    <tracciatoField>
+        <columnName>DataAggiornamento</columnName>
+        <columnType>VARCHAR</columnType>
+        <description><![CDATA[DataAggiornamento]]></description>
+        <obligatory>true</obligatory>
+    </tracciatoField>
+
+</tracciato>

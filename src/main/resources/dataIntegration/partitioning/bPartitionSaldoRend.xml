@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../job.xsd">
+
+	<jobName>PARTIZIONE SALDO REND CREATE</jobName>
+	<isThread>false</isThread>
+
+	<task>
+		<id>1</id>
+		<name>CREATE TABLE PART_SALDO_REND</name>
+	
+		<sqlProcess>
+
+			<sql><![CDATA[
+				CREATE TABLE PART_SALDO_REND 
+					(	
+						IDPTF NUMBER NOT NULL ENABLE, 
+						CODICEBANCA VARCHAR2(256 BYTE), 
+						CODICEFILIALE VARCHAR2(256 BYTE), 
+						CODICERAPPORTO VARCHAR2(256 BYTE), 
+						CODICETITOLO VARCHAR2(256 BYTE) NOT NULL ENABLE, 
+						DATA NUMBER NOT NULL ENABLE, 
+						CTV FLOAT(126), 
+						CTVVALUTA FLOAT(126), 
+						DATAAGGIORNAMENTO NUMBER, 
+						DIVISA VARCHAR2(256 BYTE), 
+						FLAG_CONSOLIDATO VARCHAR2(256 BYTE), 
+						ID_RAPPORTO VARCHAR2(256 BYTE), 
+						CTV_VERSATO FLOAT(126), 
+						CTV_PRELEVATO FLOAT(126), 
+						CTV_VERSATO_NETTO FLOAT(126), 
+						VALORE FLOAT(126), 
+						PMC FLOAT(126), 
+						CMC FLOAT(126), 
+						PREZZO FLOAT(126), 
+						TIPOPREZZO VARCHAR2(256 BYTE), 
+						ATTENDIBILITAPREZZO VARCHAR2(256 BYTE), 
+						CAMBIO FLOAT(126), 
+						PARTITA FLOAT(126), 
+						ISPCT NUMBER, 
+						RATEOLORDO FLOAT(126), 
+						ISRET NUMBER, 
+						FLAG_AGGIORNATO CHAR(1 BYTE), 
+						CODICERAPPORTO_ORI VARCHAR2(256 BYTE), 
+						COD_FASCIARENDIMENTO_BFP VARCHAR2(256 BYTE), 
+						DESCR_FASCIARENDIMENTO_BFP VARCHAR2(256 BYTE), 
+						SERIE_BFP VARCHAR2(256 BYTE), 
+						VALORE_SCADENZA_LORDO_BFP FLOAT(126), 
+						FLAG_LORDISTA_BFP VARCHAR2(256 BYTE), 
+						IMPORTO_NETTO_BFP FLOAT(126), 
+						VALORE_SCADENZA_NETTO_BFP FLOAT(126), 
+						VALORE_NOMINALE_BFP FLOAT(126), 
+						DATASOTTOSCRIZIONE DATE, 
+						DATASCADENZA DATE, 
+						CODICE_UNIVERSO_PZ VARCHAR2(256 BYTE), 
+						RAMO VARCHAR2(256 BYTE), 
+						SOTTOSTANTE_PZ VARCHAR2(256 BYTE), 
+						DATA_SALDO_NAV_PZ DATE, 
+						LINEA_PZ VARCHAR2(256 BYTE), 
+						DESCR_LINEA_PZ VARCHAR2(256 BYTE), 
+						DATA_COMPLEANNO_PZ DATE, 
+						IS_CALC_COSTI_IMP VARCHAR2(50 BYTE), 
+						SALDO_POL FLOAT(126), 
+						SALDO_POL_SP FLOAT(126)
+					) -- tablespace TS_RENDIMPC_SREND
+					PARTITION BY HASH (IDPTF)
+					SUBPARTITION BY RANGE (DATA)
+					SUBPARTITION TEMPLATE (
+					    subpartition SUB_2017 VALUES LESS THAN (20180101),
+					    subpartition SUB_2018 VALUES LESS THAN (20190101),
+					    subpartition SUB_2019 VALUES LESS THAN (20200101),
+					    subpartition SUB_2020 VALUES LESS THAN (20210101),
+					    subpartition SUB_2021 VALUES LESS THAN (20220101),
+					    subpartition SUB_2022 VALUES LESS THAN (20230101),
+					    subpartition SUB_2023 VALUES LESS THAN (20240101),
+					    subpartition SUB_2024 VALUES LESS THAN (20250101),
+					    subpartition SUB_2025 VALUES LESS THAN (20260101),
+					    subpartition SUB_2026 VALUES LESS THAN (20270101)
+					)
+					(
+						partition SREND_01 tablespace TS_RENDIMPC_SREND_01,
+						partition SREND_02 tablespace TS_RENDIMPC_SREND_02,
+						partition SREND_03 tablespace TS_RENDIMPC_SREND_03,
+						partition SREND_04 tablespace TS_RENDIMPC_SREND_04,
+						partition SREND_05 tablespace TS_RENDIMPC_SREND_05,
+						partition SREND_06 tablespace TS_RENDIMPC_SREND_06,
+						partition SREND_07 tablespace TS_RENDIMPC_SREND_07,
+						partition SREND_08 tablespace TS_RENDIMPC_SREND_08,
+						partition SREND_09 tablespace TS_RENDIMPC_SREND_09,
+						partition SREND_10 tablespace TS_RENDIMPC_SREND_10,
+						partition SREND_11 tablespace TS_RENDIMPC_SREND_11,
+						partition SREND_12 tablespace TS_RENDIMPC_SREND_12,
+						partition SREND_13 tablespace TS_RENDIMPC_SREND_13,
+						partition SREND_14 tablespace TS_RENDIMPC_SREND_14,
+						partition SREND_15 tablespace TS_RENDIMPC_SREND_15,
+						partition SREND_16 tablespace TS_RENDIMPC_SREND_16,
+						partition SREND_17 tablespace TS_RENDIMPC_SREND_17,
+						partition SREND_18 tablespace TS_RENDIMPC_SREND_18,
+						partition SREND_19 tablespace TS_RENDIMPC_SREND_19,
+						partition SREND_20 tablespace TS_RENDIMPC_SREND_20,
+						partition SREND_21 tablespace TS_RENDIMPC_SREND_21,
+						partition SREND_22 tablespace TS_RENDIMPC_SREND_22,
+						partition SREND_23 tablespace TS_RENDIMPC_SREND_23,
+						partition SREND_24 tablespace TS_RENDIMPC_SREND_24,
+						partition SREND_25 tablespace TS_RENDIMPC_SREND_25,
+						partition SREND_26 tablespace TS_RENDIMPC_SREND_26,
+						partition SREND_27 tablespace TS_RENDIMPC_SREND_27,
+						partition SREND_28 tablespace TS_RENDIMPC_SREND_28,
+						partition SREND_29 tablespace TS_RENDIMPC_SREND_29,
+						partition SREND_30 tablespace TS_RENDIMPC_SREND_30,
+						partition SREND_31 tablespace TS_RENDIMPC_SREND_31,
+						partition SREND_32 tablespace TS_RENDIMPC_SREND_32,
+						partition SREND_33 tablespace TS_RENDIMPC_SREND_33,
+						partition SREND_34 tablespace TS_RENDIMPC_SREND_34,
+						partition SREND_35 tablespace TS_RENDIMPC_SREND_35,
+						partition SREND_36 tablespace TS_RENDIMPC_SREND_36,
+						partition SREND_37 tablespace TS_RENDIMPC_SREND_37,
+						partition SREND_38 tablespace TS_RENDIMPC_SREND_38,
+						partition SREND_39 tablespace TS_RENDIMPC_SREND_39,
+						partition SREND_40 tablespace TS_RENDIMPC_SREND_40
+					)
+			]]></sql>
+
+			<sql><![CDATA[
+				ALTER TABLE RENDIMPC.PART_SALDO_REND NOLOGGING
+			]]></sql>
+			
+			<sql><![CDATA[
+				ALTER TABLE RENDIMPC.SALDO_REND NOLOGGING
+			]]></sql>
+			
+			<sql><![CDATA[
+				BEGIN
+					EXECUTE IMMEDIATE 'ALTER SESSION ENABLE PARALLEL DML';
+					EXECUTE IMMEDIATE 'ALTER SESSION ENABLE PARALLEL QUERY';
+					EXECUTE IMMEDIATE 'ALTER SESSION SET PARALLEL_FORCE_LOCAL=FALSE';
+				END;
+ 			]]></sql>
+
+			<sql><![CDATA[
+				INSERT /*+ APPEND NOLOGGING PARALLEL (SALDO_REND,20) */ 
+				INTO PART_SALDO_REND (IDPTF, 
+										CODICEBANCA, 
+										CODICEFILIALE, 
+										CODICERAPPORTO, 
+										CODICETITOLO, 
+										DATA, 
+										CTV, 
+										CTVVALUTA, 
+										DATAAGGIORNAMENTO, 
+										DIVISA, 
+										FLAG_CONSOLIDATO, 
+										ID_RAPPORTO, 
+										CTV_VERSATO, 
+										CTV_PRELEVATO, 
+										CTV_VERSATO_NETTO, 
+										VALORE, 
+										PMC, 
+										CMC, 
+										PREZZO, 
+										TIPOPREZZO, 
+										ATTENDIBILITAPREZZO, 
+										CAMBIO, 
+										PARTITA, 
+										ISPCT, 
+										RATEOLORDO, 
+										ISRET, 
+										FLAG_AGGIORNATO, 
+										CODICERAPPORTO_ORI, 
+										COD_FASCIARENDIMENTO_BFP, 
+										DESCR_FASCIARENDIMENTO_BFP, 
+										SERIE_BFP, 
+										VALORE_SCADENZA_LORDO_BFP, 
+										FLAG_LORDISTA_BFP, 
+										IMPORTO_NETTO_BFP, 
+										VALORE_SCADENZA_NETTO_BFP, 
+										VALORE_NOMINALE_BFP, 
+										DATASOTTOSCRIZIONE, 
+										DATASCADENZA, 
+										CODICE_UNIVERSO_PZ, 
+										RAMO, 
+										SOTTOSTANTE_PZ, 
+										DATA_SALDO_NAV_PZ, 
+										LINEA_PZ, 
+										DESCR_LINEA_PZ, 
+										DATA_COMPLEANNO_PZ, 
+										IS_CALC_COSTI_IMP, 
+										SALDO_POL, 
+										SALDO_POL_SP)
+				SELECT /*+ PARALLEL(SALDO_REND,20) */
+					IDPTF, 
+					CODICEBANCA, 
+					CODICEFILIALE, 
+					CODICERAPPORTO, 
+					CODICETITOLO, 
+					DATA, 
+					CTV, 
+					CTVVALUTA, 
+					DATAAGGIORNAMENTO, 
+					DIVISA, 
+					FLAG_CONSOLIDATO, 
+					ID_RAPPORTO, 
+					CTV_VERSATO, 
+					CTV_PRELEVATO, 
+					CTV_VERSATO_NETTO, 
+					VALORE, 
+					PMC, 
+					CMC, 
+					PREZZO, 
+					TIPOPREZZO, 
+					ATTENDIBILITAPREZZO, 
+					CAMBIO, 
+					PARTITA, 
+					ISPCT, 
+					RATEOLORDO, 
+					ISRET, 
+					FLAG_AGGIORNATO, 
+					CODICERAPPORTO_ORI, 
+					COD_FASCIARENDIMENTO_BFP, 
+					DESCR_FASCIARENDIMENTO_BFP, 
+					SERIE_BFP, 
+					VALORE_SCADENZA_LORDO_BFP, 
+					FLAG_LORDISTA_BFP, 
+					IMPORTO_NETTO_BFP, 
+					VALORE_SCADENZA_NETTO_BFP, 
+					VALORE_NOMINALE_BFP, 
+					DATASOTTOSCRIZIONE, 
+					DATASCADENZA, 
+					CODICE_UNIVERSO_PZ, 
+					RAMO, 
+					SOTTOSTANTE_PZ, 
+					DATA_SALDO_NAV_PZ, 
+					LINEA_PZ, 
+					DESCR_LINEA_PZ, 
+					DATA_COMPLEANNO_PZ, 
+					IS_CALC_COSTI_IMP, 
+					SALDO_POL, 
+					SALDO_POL_SP 
+				FROM SALDO_REND
+			]]></sql>
+			
+
+		</sqlProcess>
+	</task>
+	
+</job>

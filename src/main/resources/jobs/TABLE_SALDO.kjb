@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job>
+  <name>TABLE_SALDO</name>
+    <description/>
+    <extended_description/>
+    <job_version/>
+  <directory>&#x2f;</directory>
+  <created_user>-</created_user>
+  <created_date>2018&#x2f;09&#x2f;05 17&#x3a;35&#x3a;34.976</created_date>
+  <modified_user>-</modified_user>
+  <modified_date>2018&#x2f;09&#x2f;05 17&#x3a;35&#x3a;34.976</modified_date>
+    <parameters>
+    </parameters>
+  <slaveservers>
+    </slaveservers>
+<job-log-table><connection/>
+<schema/>
+<table>job_log_table</table>
+<size_limit_lines>4000</size_limit_lines>
+<interval/>
+<timeout_days/>
+<field><id>ID_JOB</id><enabled>Y</enabled><name>ID_JOB</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>JOBNAME</id><enabled>Y</enabled><name>JOBNAME</name></field><field><id>STATUS</id><enabled>Y</enabled><name>STATUS</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>STARTDATE</id><enabled>Y</enabled><name>STARTDATE</name></field><field><id>ENDDATE</id><enabled>Y</enabled><name>ENDDATE</name></field><field><id>LOGDATE</id><enabled>Y</enabled><name>LOGDATE</name></field><field><id>DEPDATE</id><enabled>Y</enabled><name>DEPDATE</name></field><field><id>REPLAYDATE</id><enabled>Y</enabled><name>REPLAYDATE</name></field><field><id>LOG_FIELD</id><enabled>Y</enabled><name>LOG_FIELD</name></field><field><id>EXECUTING_SERVER</id><enabled>N</enabled><name>EXECUTING_SERVER</name></field><field><id>EXECUTING_USER</id><enabled>N</enabled><name>EXECUTING_USER</name></field><field><id>START_JOB_ENTRY</id><enabled>Y</enabled><name>START_JOB_ENTRY</name></field><field><id>CLIENT</id><enabled>N</enabled><name>CLIENT</name></field></job-log-table>
+<jobentry-log-table><connection/>
+<schema/>
+<table>job_entry_log_table</table>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>LOG_DATE</id><enabled>Y</enabled><name>LOG_DATE</name></field><field><id>JOBNAME</id><enabled>Y</enabled><name>TRANSNAME</name></field><field><id>JOBENTRYNAME</id><enabled>Y</enabled><name>STEPNAME</name></field><field><id>LINES_READ</id><enabled>Y</enabled><name>LINES_READ</name></field><field><id>LINES_WRITTEN</id><enabled>Y</enabled><name>LINES_WRITTEN</name></field><field><id>LINES_UPDATED</id><enabled>Y</enabled><name>LINES_UPDATED</name></field><field><id>LINES_INPUT</id><enabled>Y</enabled><name>LINES_INPUT</name></field><field><id>LINES_OUTPUT</id><enabled>Y</enabled><name>LINES_OUTPUT</name></field><field><id>LINES_REJECTED</id><enabled>Y</enabled><name>LINES_REJECTED</name></field><field><id>ERRORS</id><enabled>Y</enabled><name>ERRORS</name></field><field><id>RESULT</id><enabled>Y</enabled><name>RESULT</name></field><field><id>NR_RESULT_ROWS</id><enabled>Y</enabled><name>NR_RESULT_ROWS</name></field><field><id>NR_RESULT_FILES</id><enabled>Y</enabled><name>NR_RESULT_FILES</name></field><field><id>LOG_FIELD</id><enabled>Y</enabled><name>LOG_FIELD</name></field><field><id>COPY_NR</id><enabled>Y</enabled><name>COPY_NR</name></field></jobentry-log-table>
+<channel-log-table><connection/>
+<schema/>
+<table>logging_channel_log_table</table>
+<timeout_days/>
+<field><id>ID_BATCH</id><enabled>Y</enabled><name>ID_BATCH</name></field><field><id>CHANNEL_ID</id><enabled>Y</enabled><name>CHANNEL_ID</name></field><field><id>LOG_DATE</id><enabled>Y</enabled><name>LOG_DATE</name></field><field><id>LOGGING_OBJECT_TYPE</id><enabled>Y</enabled><name>LOGGING_OBJECT_TYPE</name></field><field><id>OBJECT_NAME</id><enabled>Y</enabled><name>OBJECT_NAME</name></field><field><id>OBJECT_COPY</id><enabled>Y</enabled><name>OBJECT_COPY</name></field><field><id>REPOSITORY_DIRECTORY</id><enabled>Y</enabled><name>REPOSITORY_DIRECTORY</name></field><field><id>FILENAME</id><enabled>Y</enabled><name>FILENAME</name></field><field><id>OBJECT_ID</id><enabled>Y</enabled><name>OBJECT_ID</name></field><field><id>OBJECT_REVISION</id><enabled>Y</enabled><name>OBJECT_REVISION</name></field><field><id>PARENT_CHANNEL_ID</id><enabled>Y</enabled><name>PARENT_CHANNEL_ID</name></field><field><id>ROOT_CHANNEL_ID</id><enabled>Y</enabled><name>ROOT_CHANNEL_ID</name></field></channel-log-table>
+   <pass_batchid>Y</pass_batchid>
+   <shared_objects_file/>
+  <entries>
+    <entry>
+      <name>SALDO MULTIRAMO</name>
+      <description/>
+      <type>SQL</type>
+      <sql>DECLARE&#xa;    i INTEGER&#x3b;&#xa;BEGIN&#xa;&#xa;	EXECUTE IMMEDIATE &#x27;TRUNCATE TABLE TEMP_MULTIRAMO DROP STORAGE&#x27;&#x3b;&#xa;	COMMIT&#x3b;&#xa;	&#xa;	INSERT &#x2f;&#x2a;&#x2b;APPEND NOLOGGING PARALLEL&#x28;TEMP_MULTIRAMO,8&#x29;&#x2a;&#x2f; into TEMP_MULTIRAMO&#x28;CODICETITOLO,CODICERAMO&#x29;&#xa;	&#x28;&#xa;		SELECT DISTINCT A.CODICETITOLO,A.GMPOL11 FROM &#x28;&#xa;		&#x28;SELECT CODICETITOLO,GMPOL11,VAR FROM STRUMENTOFINANZIARIO WHERE RAMOPOL IN &#x28;&#x27;M&#x27;,&#x27;N&#x27;&#x29; AND GMPOL11 IS NOT NULL&#x29; A&#xa;		JOIN&#xa;		&#x28;SELECT GMPOL11,MAX&#x28;VAR&#x29; AS MAXVAR FROM STRUMENTOFINANZIARIO WHERE RAMOPOL IN &#x28;&#x27;M&#x27;,&#x27;N&#x27;&#x29; AND GMPOL11 IS NOT NULL GROUP BY GMPOL11&#x29; B&#xa;		ON A.GMPOL11&#x3d;B.GMPOL11&#xa;		AND A.VAR&#x3d;B.MAXVAR&#xa;		&#x29;&#xa;	UNION&#xa;	&#xa;		SELECT DISTINCT A.CODICETITOLO,A.GMPOL12 FROM &#x28;&#xa;		&#x28;SELECT CODICETITOLO,GMPOL12,VAR FROM STRUMENTOFINANZIARIO WHERE RAMOPOL IN &#x28;&#x27;M&#x27;,&#x27;N&#x27;&#x29; AND GMPOL12 IS NOT NULL&#x29; A&#xa;		JOIN&#xa;		&#x28;SELECT GMPOL12,MAX&#x28;VAR&#x29; AS MAXVAR FROM STRUMENTOFINANZIARIO WHERE RAMOPOL IN &#x28;&#x27;M&#x27;,&#x27;N&#x27;&#x29; AND GMPOL12 IS NOT NULL GROUP BY GMPOL12&#x29; B&#xa;		ON A.GMPOL12&#x3d;B.GMPOL12&#xa;		AND A.VAR&#x3d;B.MAXVAR&#xa;		&#x29;&#xa;	&#x29;&#x3b;&#xa;	COMMIT&#x3b;&#xa;&#xa;&#xa;    SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;TMP_GMPOL1_IDX&#x27;&#x3b;&#xa;    IF i &#x3d; 0 THEN&#xa;        EXECUTE IMMEDIATE &#x27;CREATE INDEX TMP_GMPOL1_IDX ON STRUMENTOFINANZIARIO&#x28;GMPOL11&#x29; TABLESPACE RENDIMPC_INDEX &#x27;&#x3b;&#xa;    END IF&#x3b;&#xa;    &#xa;    SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;TMP_GMPOL2_IDX&#x27;&#x3b;&#xa;	IF i &#x3d; 0 THEN&#xa;	      EXECUTE IMMEDIATE &#x27;CREATE INDEX TMP_GMPOL2_IDX ON STRUMENTOFINANZIARIO&#x28;GMPOL12&#x29; TABLESPACE RENDIMPC_INDEX &#x27;&#x3b;&#xa;	END IF&#x3b;&#xa;&#xa;    SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;TMP_RAMOPOL_IDX&#x27;&#x3b;&#xa;    IF i &#x3d; 0 THEN&#xa;        EXECUTE IMMEDIATE &#x27;CREATE INDEX TMP_RAMOPOL_IDX ON STRUMENTOFINANZIARIO&#x28;RAMOPOL&#x29; TABLESPACE RENDIMPC_INDEX &#x27;&#x3b;&#xa;    END IF&#x3b;	&#xa;    &#xa;    SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;TMP_SALDOCODICETIT_IDX&#x27;&#x3b;&#xa;    IF i &#x3d; 0 THEN&#xa;        EXECUTE IMMEDIATE &#x27;CREATE INDEX TMP_SALDOCODICETIT_IDX ON SALDO&#x28;CODICETITOLO&#x29; TABLESPACE RENDIMPC_INDEX &#x27;&#x3b;&#xa;    END IF&#x3b;    &#xa;    &#xa;    dbms_stats.gather_table_stats&#x28;ownname &#x3d;&#x3e; sys_context&#x28;&#x27;USERENV&#x27;, &#x27;CURRENT_SCHEMA&#x27;&#x29;, tabname &#x3d;&#x3e; &#x27;TEMP_MULTIRAMO&#x27;, degree &#x3d;&#x3e; 4, estimate_percent&#x3d;&#x3e;1&#x29;&#x3b;&#xa;    dbms_stats.gather_table_stats&#x28;ownname &#x3d;&#x3e; sys_context&#x28;&#x27;USERENV&#x27;, &#x27;CURRENT_SCHEMA&#x27;&#x29;, tabname &#x3d;&#x3e; &#x27;SALDO&#x27;, degree &#x3d;&#x3e; 4, estimate_percent&#x3d;&#x3e;1&#x29;&#x3b;&#xa;    &#xa;    &#xa;	UPDATE &#x2f;&#x2a;&#x2b; APPEND PARALLEL&#x2a;&#x2f; SALDO SET CODICETITOLO&#x3d;&#x28;SELECT CODICETITOLO FROM TEMP_MULTIRAMO T WHERE SALDO.CODICETITOLO&#x3d;T.CODICERAMO&#x29;&#xa;	WHERE EXISTS &#x28;&#xa;	 	SELECT 1 FROM STRUMENTOFINANZIARIO WHERE RAMOPOL IN &#x28;&#x27;M&#x27;,&#x27;N&#x27;&#x29; and &#x28;SALDO.CODICETITOLO&#x3d;GMPOL11 OR SALDO.CODICETITOLO&#x3d;GMPOL12&#x29;&#xa;	&#x29;&#x3b;&#xa;	&#xa;	EXECUTE IMMEDIATE &#x27;TRUNCATE TABLE PFPPROCESS_DATA DROP STORAGE&#x27;&#x3b;&#xa;END&#x3b;&#xa;</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;sql&#x2f;riempi_prodotto&#x2f;saldo_multiramo.sql</sqlfilename>
+      <sendOneStatement>T</sendOneStatement>
+      <connection>db-connection</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>448</xloc>
+      <yloc>192</yloc>
+      </entry>
+    <entry>
+      <name>START</name>
+      <description/>
+      <type>SPECIAL</type>
+      <start>Y</start>
+      <dummy>N</dummy>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <hour>12</hour>
+      <minutes>0</minutes>
+      <weekDay>1</weekDay>
+      <DayOfMonth>1</DayOfMonth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>64</xloc>
+      <yloc>64</yloc>
+      </entry>
+    <entry>
+      <name>TABLE SALDO</name>
+      <description/>
+      <type>SQL</type>
+      <sql>&#xa;DECLARE&#xa;	i INTEGER&#x3b;&#xa;BEGIN&#xa;	&#xa;	EXECUTE IMMEDIATE &#x27;TRUNCATE TABLE SALDO DROP STORAGE&#x27;&#x3b;&#xa;	&#xa;	SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;RAP_PTF_IDX&#x27;&#x3b;&#xa;	IF i &#x3d; 0 THEN&#xa;		EXECUTE IMMEDIATE &#x27;CREATE INDEX RAP_PTF_IDX ON RAPPORTO&#x28;IDPTF&#x29; TABLESPACE RENDIMPC_INDEX &#x27;&#x3b;&#xa;	END IF&#x3b;&#xa;	COMMIT&#x3b;&#xa;	&#xa;	SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;RAPP_TMPSAL_IDX&#x27;&#x3b;&#xa;	IF i &#x3d; 0 THEN&#xa;	   EXECUTE IMMEDIATE &#x27;CREATE INDEX RAPP_TMPSAL_IDX ON RAPPORTO&#x28;&#x22;CODICERAPPORTO&#x22;,&#x22;CODICEAGENZIA&#x22;,&#x22;TIPO&#x22;&#x29; TABLESPACE RENDIMPC_INDEX &#x27;&#x3b;&#xa;	END IF&#x3b;&#xa;	COMMIT&#x3b;&#xa;	&#xa;	SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;FK_SALDO_PORTAFOGLIO_IDX&#x27;&#x3b;&#xa;	IF i &#x3d; 1 THEN&#xa;		EXECUTE IMMEDIATE &#x27;DROP INDEX FK_SALDO_PORTAFOGLIO_IDX&#x27;&#x3b;&#xa;	END IF&#x3b;&#xa;	COMMIT&#x3b;&#xa;	&#xa;	SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_tables WHERE table_name &#x3d; &#x27;TEMP_SALDO&#x27;&#x3b;&#xa;	IF i &#x3d; 1 THEN&#xa;		EXECUTE IMMEDIATE &#x27;DROP TABLE TEMP_SALDO&#x27;&#x3b;&#xa;	END IF&#x3b;&#xa;	COMMIT&#x3b;&#xa;	&#xa;	SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_tables WHERE table_name &#x3d; &#x27;TEMP_SALDO&#x27;&#x3b;&#xa;	IF i &#x3d; 0 THEN&#xa;		EXECUTE IMMEDIATE &#x27;CREATE TABLE TEMP_SALDO AS&#xa;							SELECT CASE WHEN TIPORAPPORTO&#x3d;&#x27;&#x27;01&#x27;&#x27; THEN &#x27;&#x27;LIQ_EUR&#x27;&#x27; ELSE &#x28;CASE WHEN TIPORAPPORTO&#x3d;&#x27;&#x27;02&#x27;&#x27; THEN &#x27;&#x27;LIQ_EUR_LIB&#x27;&#x27; ELSE CODICEINTERNO END&#x29; END CODICEINTERNO,&#xa;							DATASALDO,QUANTITA,&#xa;							CASE WHEN CONTROVALORE &#x3c; 0 THEN 0 ELSE CONTROVALORE END CONTROVALORE,&#xa;							DATASCADENZA,&#xa;							DATASOTTOSCRIZIONE,&#xa;							CASE WHEN TIPORAPPORTO&#x3d;14 THEN SUBSTR&#x28;CODICERAPPORTO,0,LENGTH&#x28;CODICERAPPORTO&#x29;-2&#x29; ELSE CODICERAPPORTO END CODICERAPPORTO,&#xa;							TIPORAPPORTO,&#xa;							CODICEAGENZIA&#xa;							FROM TMP_PFSALDI &#x27;&#x3b;&#xa;	END IF&#x3b;&#xa;	COMMIT&#x3b;&#xa;	&#xa;    SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;TEMP_SALDI_IDX&#x27;&#x3b;&#xa;    IF i &#x3d; 0 THEN&#xa;        EXECUTE IMMEDIATE &#x27;CREATE INDEX TEMP_SALDI_IDX ON TEMP_SALDO&#x28;&#x22;CODICERAPPORTO&#x22;,&#x22;CODICEAGENZIA&#x22;,&#x22;TIPORAPPORTO&#x22;&#x29; TABLESPACE RENDIMPC_INDEX &#x27;&#x3b;&#xa;    END IF&#x3b;&#xa;    COMMIT&#x3b;&#xa;    &#xa;    dbms_stats.gather_table_stats&#x28;ownname &#x3d;&#x3e; sys_context&#x28;&#x27;USERENV&#x27;, &#x27;CURRENT_SCHEMA&#x27;&#x29;, tabname &#x3d;&#x3e; &#x27;TEMP_SALDO&#x27;, degree &#x3d;&#x3e; 4, estimate_percent&#x3d;&#x3e;1&#x29;&#x3b;&#xa;    dbms_stats.gather_table_stats&#x28;ownname &#x3d;&#x3e; sys_context&#x28;&#x27;USERENV&#x27;, &#x27;CURRENT_SCHEMA&#x27;&#x29;, tabname &#x3d;&#x3e; &#x27;SALDO&#x27;, degree &#x3d;&#x3e; 4, estimate_percent&#x3d;&#x3e;1&#x29;&#x3b;&#xa;    dbms_stats.gather_table_stats&#x28;ownname &#x3d;&#x3e; sys_context&#x28;&#x27;USERENV&#x27;, &#x27;CURRENT_SCHEMA&#x27;&#x29;, tabname &#x3d;&#x3e; &#x27;RAPPORTO&#x27;, degree &#x3d;&#x3e; 4, estimate_percent&#x3d;&#x3e;1&#x29;&#x3b;&#xa;    &#xa;	INSERT &#x2f;&#x2a;&#x2b;APPEND NOLOGGING PARALLEL&#x28;SALDO,8&#x29;&#x2a;&#x2f; INTO SALDO &#x28;IDPTF,CODICETITOLO,DATA,VALORE,PMC,CMC,CTV,CTVVALUTA,DATAAGGIORNAMENTO,DATASCADENZA,DATAACQUISTO&#x29;&#xa;	SELECT  R.IDPTF,Z.CODICEINTERNO,Z.DATASALDO,Z.QUANTITA,0,0,Z.CONTROVALORE,Z.CONTROVALORE,TO_CHAR&#x28;SYSDATE,&#x27;yyyymmdd&#x27;&#x29;,Z.DATASCADENZA,Z.DATASOTTOSCRIZIONE&#xa;	FROM  RAPPORTO R inner join TEMP_SALDO Z&#xa;	on&#x28; R.CODICERAPPORTO&#x3d;Z.CODICERAPPORTO&#xa;	AND R.CODICEAGENZIA&#x3d;Z.CODICEAGENZIA&#xa;	AND R.TIPO&#x3d;Z.TIPORAPPORTO&#x29;&#xa;	AND EXISTS &#x28;SELECT 1 FROM STRUMENTOFINANZIARIO SF WHERE Z.CODICEINTERNO&#x3d;SF.CODICETITOLO&#x29;&#x3b;&#xa;&#xa;	COMMIT&#x3b;    &#xa;    &#xa;	SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_tables WHERE table_name &#x3d; &#x27;TEMP_SALDO&#x27;&#x3b;&#xa;	IF i &#x3d; 1 THEN&#xa;		EXECUTE IMMEDIATE &#x27;DROP TABLE TEMP_SALDO&#x27;&#x3b;&#xa;	END IF&#x3b;&#xa;	COMMIT&#x3b; &#xa;	&#xa;	SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM USER_CONSTRAINTS WHERE CONSTRAINT_NAME &#x3d; &#x27;FK_SALDO_PORTAFOGLIO&#x27;&#x3b;&#xa;	IF i &#x3d;0 THEN&#xa;		EXECUTE IMMEDIATE &#x27;ALTER TABLE SALDO ADD CONSTRAINT FK_SALDO_PORTAFOGLIO FOREIGN KEY &#x28;IDPTF&#x29; REFERENCES PORTAFOGLIO &#x28;ID&#x29;&#x27;&#x3b;&#xa;	END IF&#x3b;&#xa;	COMMIT&#x3b; &#xa;	&#xa;	SELECT COUNT&#x28;&#x2a;&#x29; INTO i FROM user_indexes WHERE index_name &#x3d; &#x27;FK_SALDO_PORTAFOGLIO_IDX&#x27;&#x3b;&#xa;	IF i &#x3d; 0 THEN&#xa;		EXECUTE IMMEDIATE &#x27;CREATE INDEX FK_SALDO_PORTAFOGLIO_IDX ON SALDO&#x28;IDPTF&#x29; TABLESPACE RENDIMPC_INDEX &#x27;&#x3b;&#xa;		EXECUTE IMMEDIATE &#x27;ALTER INDEX FK_SALDO_PORTAFOGLIO_IDX NOPARALLEL&#x27;&#x3b;&#xa;	END IF&#x3b;	&#xa;	COMMIT&#x3b; &#xa;END&#x3b;&#xa;&#xa;&#xa;&#xa;&#xa;&#xa;</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;sql&#x2f;riempi_prodotto&#x2f;saldo.sql</sqlfilename>
+      <sendOneStatement>T</sendOneStatement>
+      <connection>db-connection</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>304</xloc>
+      <yloc>64</yloc>
+      </entry>
+    <entry>
+      <name>Success</name>
+      <description/>
+      <type>SUCCESS</type>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>256</xloc>
+      <yloc>496</yloc>
+      </entry>
+    <entry>
+      <name>DATARIF</name>
+      <description/>
+      <type>SQL</type>
+      <sql>UPDATE DATARIFSALDI SET DATA&#x3d;&#x28;SELECT DATA FROM SALDO WHERE ROWNUM&#x3c;&#x3d;1&#x29;</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>T</sqlfromfile>
+      <sqlfilename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;sql&#x2f;riempi_prodotto&#x2f;data_dashboard.sql</sqlfilename>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>db-connection</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>352</xloc>
+      <yloc>320</yloc>
+      </entry>
+    <entry>
+      <name>ERROR TABLE SALDO</name>
+      <description/>
+      <type>WRITE_TO_LOG</type>
+      <logmessage>ERROR TABLE SALDO</logmessage>
+      <loglevel>Debug</loglevel>
+      <logsubject/>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>192</xloc>
+      <yloc>192</yloc>
+      </entry>
+    <entry>
+      <name>ERROR SALDO MULTIRAMO</name>
+      <description/>
+      <type>WRITE_TO_LOG</type>
+      <logmessage>ERROR SALDO MULTIRAMO</logmessage>
+      <loglevel>Debug</loglevel>
+      <logsubject/>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>544</xloc>
+      <yloc>320</yloc>
+      </entry>
+    <entry>
+      <name>TRUNCATE SALDO ERROR</name>
+      <description/>
+      <type>SQL</type>
+      <sql>TRUNCATE TABLE SALDO DROP STORAGE&#x3b;</sql>
+      <useVariableSubstitution>F</useVariableSubstitution>
+      <sqlfromfile>F</sqlfromfile>
+      <sqlfilename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;sql&#x2f;riempi_prodotto&#x2f;saldo.sql</sqlfilename>
+      <sendOneStatement>F</sendOneStatement>
+      <connection>db-connection</connection>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>192</xloc>
+      <yloc>320</yloc>
+      </entry>
+  </entries>
+  <hops>
+    <hop>
+      <from>TABLE SALDO</from>
+      <to>SALDO MULTIRAMO</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>SALDO MULTIRAMO</from>
+      <to>DATARIF</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>START</from>
+      <to>TABLE SALDO</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+    <hop>
+      <from>DATARIF</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>TABLE SALDO</from>
+      <to>ERROR TABLE SALDO</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>SALDO MULTIRAMO</from>
+      <to>ERROR SALDO MULTIRAMO</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>ERROR SALDO MULTIRAMO</from>
+      <to>DATARIF</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>ERROR TABLE SALDO</from>
+      <to>TRUNCATE SALDO ERROR</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>TRUNCATE SALDO ERROR</from>
+      <to>Success</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>N</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+  </hops>
+  <notepads>
+  </notepads>
+
+</job>

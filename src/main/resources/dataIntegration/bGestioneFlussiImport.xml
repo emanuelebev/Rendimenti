@@ -1,0 +1,754 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="job.xsd">
+	<jobName>GESTIONE FLUSSI GIORNALIERO</jobName>
+	<isThread>false</isThread>
+	
+	<task>
+		<id>1</id>
+		<name>CONCAT FLUSSO CAMBI</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_Titoli_Cambi_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_Titoli_Cambi_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>  non ha la coda-->
+
+			</arguments>
+		</javaProcess>
+	</task>	
+	
+	<task>
+		<id>2</id>
+		<name>CONCAT FLUSSO COSTI PRODOTTO</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_Titoli_CostiProdotto_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_Titoli_CostiProdotto_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg> -->
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>3</id>
+		<name>CONCAT FLUSSO COSTI SERVIZIO</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_Titoli_CostiServizio_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_Titoli_CostiServizio_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg> -->
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>4</id>
+		<name>CONCAT FLUSSO PREZZI</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_EDWH_Prezzi_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>Prezzi_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg> -->
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>5</id>
+		<name>CONCAT FLUSSO PREZZI TITOLI</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_Titoli_Prezzi_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_Titoli_Prezzi_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg> -->
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>6</id>
+		<name>CONCAT FLUSSO SALDI STORICI</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_EDWH_SaldiStorici_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_EDWH_SaldiStorici_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg> -->
+
+			</arguments>
+		</javaProcess>
+	</task>
+
+	
+	<task>
+		<id>9</id>
+		<name>CONCAT FLUSSO SALDI POLIZZE</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^BP_SALDI_GG_.*txt$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>BP_SALDI_GG_CONCAT.txt</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>10</id>
+		<name>CONCAT FLUSSO SALDI POLIZZE SOMME DA PAGARE</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^BP_SALDI_SP_GG_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>BP_SALDI_SP_GG_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>11</id>
+		<name>CONCAT FLUSSO MOVIMENTI</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_EDWH_Movimenti_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_EDWH_Movimenti_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg> -->
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>12</id>
+		<name>CONCAT FLUSSO MOVIMENTI TITOLI</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_Titoli_Movimenti_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_Titoli_Movimenti_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg> -->
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>13</id>
+		<name>CONCAT FLUSSO COSTI MOVIMENTI</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_EDWH_CostiMovimenti_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_EDWH_CostiMovimenti_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg> -->
+
+			</arguments>
+		</javaProcess>
+	</task>
+		
+	<task>
+		<id>14</id>
+		<name>CONCAT FLUSSO COSTI MOVIMENTI TITOLI</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_Titoli_CostiMovimenti_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_Titoli_CostiMovimenti_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<!-- <arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg> -->
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>15</id>
+		<name>CONCAT FLUSSO RECUPERO SALDI POLIZZE</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^RECUP_BP_SALDI_GG_.*txt$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>RECUP_BP_SALDI_GG_CONCAT.txt</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>16</id>
+		<name>CONCAT FLUSSO RECUPERO SALDI POLIZZE SOMME DA PAGARE</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^RECUP_BP_SALDI_SP_GG_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>RECUP_BP_SALDI_SP_GG_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>17</id>
+		<name>CONCAT FLUSSO MOVIMENTO INCASSATO COASSICURAZIONE</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^BP_INCASSATO_GG_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>BP_INCASSATO_COASS_GG_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>18</id>
+		<name>CONCAT FLUSSO MOVIMENTO PAGAMENTI COASSICURAZIONE</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^BP_PAGAMENTI_GG_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>BP_PAGAMENTI_COASS_GG_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>19</id>
+		<name>CONCAT FLUSSO MOVIMENTO INCASSATO FONDO MULTIRAMO</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^BP_INCASSI_FONDO_MULTIRAMO_GG_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>BP_INCASSI_FONDO_MULTIRAMO_GG_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>20</id>
+		<name>CONCAT FLUSSO MOVIMENTO PAGAMENTI FONDO MULTIRAMO</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^BP_PAGAMENTI_FONDO_MULTIRAMO_GG_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>BP_PAGAMENTI_FONDO_MULTIRAMO_GG_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>21</id>
+		<name>CONCAT FLUSSO MOVIMENTO SWITCH PRIVATE</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^BP_SWITCH_PRIVATE_GG_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>BP_SWITCH_PRIVATE_GG_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>22</id>
+		<name>CONCAT FLUSSO QUOTAZIONE R3</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^BP_QUOTAZIONE_R3_GG_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>BP_QUOTAZIONE_R3_GG_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+				<arg>-skipHeaderNumLines</arg>
+				<arg>1</arg>
+	
+				<arg>-skipFooterString</arg>
+				<arg><![CDATA[<CODA>]]></arg>
+
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>23</id>
+		<name>CONCAT FLUSSO MOVIMENTI GP</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_GPM_Movimenti_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_GPM_Movimenti_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>24</id>
+		<name>CONCAT FLUSSO SALDI GP</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_GPM_Saldi_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_GPM_Saldi_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>25</id>
+		<name>CONCAT FLUSSO COSTI GP</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>^REND_GPM_Costi_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_GPM_Costi_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+			</arguments>
+		</javaProcess>
+	</task>
+	
+	<task>
+		<id>25</id>
+		<name>CONCAT FLUSSO COSTI FONDI ESTERNI AFB</name>
+		<javaProcess>
+			<className>it.prometeia.batch.importa.TaskGestioneFlussiImport</className>
+			<arguments>
+			
+				<arg>-pathFlussoInput</arg>
+				<arg>%PATH_FLUSSI_1%</arg>
+			
+				<arg>-filterFlussiInput</arg>
+				<arg>REND_FONDIESTERNI_Costi_.*csv$</arg>
+				
+				<arg>-includeInputSubfolders</arg>
+				<arg>false</arg>
+
+				<arg>-nomeFlussoOutput</arg>
+				<arg>REND_Fondi_Costi_AFB_CONCAT.csv</arg>
+				
+				<arg>-pathFlussoOutput</arg>
+				<arg>%PATH_FLUSSI_1%/Giornaliero/</arg>
+			
+			</arguments>
+		</javaProcess>
+	</task>
+</job>
+
+
+
+	

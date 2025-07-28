@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFMOV_PAG_COASS</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/BP_PAGAMENTI_COASS_GG_CONCAT.csv</importFilePath>
+	<!-- Note Il file ha il formato definito da poste vita. Attenzione: è un 
+		file posizionale a lunghezza fissa, e c'è sia un record di testa che un record 
+		di coda. I numeri hanno '.' come separatore dei decimali Le date hanno formato 
+		AAAAMMGG -->
+	<readerClassName>it.prometeia.batch.importa.RendReaderWarnNoFile</readerClassName>
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck> 
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	<fixWidth>true</fixWidth>
+	
+	<!-- 1 Ramo Ramo della polizza S (KEY) Varchar(2) -->
+	<tracciatoField>
+		<columnName>RAMO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Ramo]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>0</fixedStart>
+		<fixedEnd>2</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<!-- 2 CodiceProdotto Codice del prodotto, es MRU04 S (KEY) Varchar(5) Per le multiramo è il prodotto sottostante -->
+	<tracciatoField>
+		<columnName>CODICE_PRODOTTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceProdotto]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<fixedStart>2</fixedStart>
+		<fixedEnd>7</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<!-- 3 Numero Polizza Codice rapporto - Per '"legare" con codice rapporto in PCG aggiungere uno 0 in testa -->
+	<tracciatoField>
+		<columnName>NUMERO_POLIZZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Numero Polizza]]></description>
+		<columnMaxLength>11</columnMaxLength>
+		<fixedStart>7</fixedStart>
+		<fixedEnd>18</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 4 Data Comunicazione Pagamento Data Comunicazione Pagamento. E’ la data che pilota l’estrazione. S (KEY) Varchar(8) -->
+	<tracciatoField>
+		<columnName>DATA_COMUNICAZIONE_PAGAMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Comunicazione Pagamento]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>18</fixedStart>
+		<fixedEnd>26</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<!-- 5 Codice Fiscale Beneficiario Codice Fiscale S (KEY) Varchar(16) -->
+	<tracciatoField>
+		<columnName>CODICE_FISCALE_BENEFICIARIO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Fiscale Beneficiario]]></description>
+		<columnMaxLength>16</columnMaxLength>
+		<fixedStart>26</fixedStart>
+		<fixedEnd>42</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 6 CodiceInterno Modalità di pagamento. Sempre valorizzata nel flusso ma non rilevante per PdR. I valori ammessi sono quelli della tipologia causali polizze con codice dominio = 014-->
+	<tracciatoField>
+		<columnName>MODALITA_PAGAMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Modalità di pagamento]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>42</fixedStart>
+		<fixedEnd>44</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 7 Frazionario di emissione Codice filiale-->
+	<tracciatoField>
+		<columnName>FRAZIONARIO_DI_EMISSIONE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Frazionario di emissione]]></description>
+		<columnMaxLength>6</columnMaxLength>
+		<fixedStart>44</fixedStart>
+		<fixedEnd>50</fixedEnd>
+	</tracciatoField>
+	<!-- 8 Tipo liquidazione - Corrisponde alla causale. I valori ammessi sono quelli della tipologia causali polizze con codice dominio =020. Nel flusso di esempio fornitoci, del 31 luglio, 
+	sono presenti solo i valori:1 - RISCATTO TOTALE 2 - RISCATTO PARZIALE -->
+	<tracciatoField>
+		<columnName>TIPO_LIQUIDAZIONE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Tipo liquidazione]]></description>
+		<columnMaxLength>1</columnMaxLength>
+		<fixedStart>50</fixedStart>
+		<fixedEnd>51</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 9 Codice frazionammento Frequenza. "I valori ammessi sono quelli della tipologia causali polizze con codice dominio =025 Esempio 1 - ANNUALE 12 - MENSILE 7- UNICO " -->
+	<tracciatoField>
+		<columnName>CODICE_FRAZIONAMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice frazionamento]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>51</fixedStart>
+		<fixedEnd>53</fixedEnd>
+	</tracciatoField>
+	<!-- 10 Data effetto polizza Data effetto polizza. Dal flusso sembra essere la data di decorrenza -->
+	<tracciatoField>
+		<columnName>DATA_EFFETTO_POLIZZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data effetto polizza]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>53</fixedStart>
+		<fixedEnd>61</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 11 Data Scadenza-->
+	<tracciatoField>
+		<columnName>DATA_SCADENZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Scadenza]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>61</fixedStart>
+		<fixedEnd>69</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 12 Data Valuta - Data valuta pagamento-->
+	<tracciatoField>
+		<columnName>DATA_VALUTA</columnName>
+		<columnType>INTEGER</columnType>
+		<description><![CDATA[Data Valuta]]></description>
+		<minValue>20171230</minValue>
+		<maxValue>29990000</maxValue>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>69</fixedStart>
+		<fixedEnd>77</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 13 Data Competenza - Data competenza pagamento-->
+	<tracciatoField>
+		<columnName>DATA_COMPETENZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Competenza]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>77</fixedStart>
+		<fixedEnd>85</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 14 Codice Fiscale Contraente Codice Fiscale-->
+	<tracciatoField>
+		<columnName>CODICE_FISCALE_CONTRAENTE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Fiscale Contraente]]></description>
+		<columnMaxLength>16</columnMaxLength>
+		<fixedStart>85</fixedStart>
+		<fixedEnd>101</fixedEnd>
+	</tracciatoField>
+	<!-- 15 Strumento di Pagamento Contiene il codice IBAN, il codice del libretto etc etc S Varchar(50) Non utile a PdR -->
+	<tracciatoField>
+		<columnName>STRUMENTO_DI_PAGAMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Strumento di Pagamento]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<fixedStart>101</fixedStart>
+		<fixedEnd>151</fixedEnd>
+	</tracciatoField>
+	<!-- 16 Importo Pagato Controvalore regolato-Controvalore netto che arriva in tasca al cliente -->
+	<tracciatoField>
+		<columnName>IMPORTO_PAGATO</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Importo Pagato]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>151</fixedStart>
+		<fixedEnd>170</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 17 InteresseMora Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>INTERESSE_MORA</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Interesse Mora]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>170</fixedStart>
+		<fixedEnd>189</fixedEnd>
+	</tracciatoField>
+	<!-- 18 RitenutaInteresseMora - Importo della voce di costo "RitenutaInteresseMora" - Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>RITENUTA_INTERESSE_MORA</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Ritenuta Interesse Mora]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>189</fixedStart>
+		<fixedEnd>208</fixedEnd>
+	</tracciatoField>
+	<!-- 19 CostoLiquidazione - Importo della voce di costo "CostoLiquidazione" - Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>COSTO_LIQUIDAZIONE</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Costo Liquidazione]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>208</fixedStart>
+		<fixedEnd>227</fixedEnd>
+	</tracciatoField>
+	<!-- 20 Imposta sostitutiva - Importo della voce di costo "ImpostaSostitutiva" -Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>IMPOSTA_SOSTITUTIVA</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Imposta sostitutiva]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>227</fixedStart>
+		<fixedEnd>246</fixedEnd>
+	</tracciatoField>
+	<!-- 21 Imposta Bollo - Importo della voce di costo "ImpostaBollo" -Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>IMPOSTA_BOLLO</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Imposta bollo]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>246</fixedStart>
+		<fixedEnd>265</fixedEnd>
+	</tracciatoField>
+	<!-- 22 Importo pagato comprensivo della quota coass -->
+	<tracciatoField>
+		<columnName>IMPORTO_PAGATO_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Importo pagato Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>265</fixedStart>
+		<fixedEnd>284</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 23 CostoLiquidazione Coass - Importo della voce di costo "CostoLiquidazione Coass" - Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>COSTO_LIQUIDAZIONE_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Costo liquidazione Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>284</fixedStart>
+		<fixedEnd>303</fixedEnd>
+	</tracciatoField>
+	<!-- 24 Imposta sostitutiva Coass - Importo della voce di costo "ImpostaSostitutivaCoass" -Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>IMPOSTA_SOSTITUTIVA_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Imposta sostitutiva Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>303</fixedStart>
+		<fixedEnd>322</fixedEnd>
+	</tracciatoField>
+	<!-- 25 Imposta Bollo Coass - Importo della voce di costo "ImpostaBolloCoass" -Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>IMPOSTA_BOLLO_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Imposta bollo Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>322</fixedStart>
+		<fixedEnd>341</fixedEnd>
+	</tracciatoField>
+	<!-- 26 InteresseMoraCoass Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>INTERESSE_MORA_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Interesse Mora Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>341</fixedStart>
+		<fixedEnd>360</fixedEnd>
+	</tracciatoField>
+	<!-- 27 RitenutaInteresseMoraCoass - Importo della voce di costo "RitenutaInteresseMoraCoass" - Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO-->
+	<tracciatoField>
+		<columnName>RITENUTA_INTERESSE_MORA_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Ritenuta Interesse Mora Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>360</fixedStart>
+		<fixedEnd>379</fixedEnd>
+	</tracciatoField>
+	<!-- 28 Data Calcolo Pagamento-->
+	<tracciatoField>
+		<columnName>DATA_CALCOLO_PAGAMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Calcolo Pagamento]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>379</fixedStart>
+		<fixedEnd>387</fixedEnd>
+	</tracciatoField>		
+	<tracciatoField>
+		<columnName>COSTO_ETF</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Costo ETF]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>387</fixedStart>
+		<fixedEnd>406</fixedEnd>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>NUMERO_PRATICA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Numero Pratica]]></description>
+		<columnMaxLength>9</columnMaxLength>
+		<fixedStart>406</fixedStart>
+		<fixedEnd>415</fixedEnd>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CODICE_LINEA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Linea Investimento]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>415</fixedStart>
+		<fixedEnd>416</fixedEnd>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+</tracciato>

@@ -1,0 +1,179 @@
+CREATE OR REPLACE FUNCTION PARALLEL_SQUAD_CTV2018 (
+	squad_ctv IN SYS_REFCURSOR
+) 
+RETURN PARALLEL_FUNCTION
+PARALLEL_ENABLE (PARTITION squad_ctv BY ANY)
+PIPELINED
+IS
+        PRAGMA AUTONOMOUS_TRANSACTION;
+    
+     TYPE squad_ctv_TYPE_cur IS RECORD (
+        							
+TIPOSTRUM			VARCHAR2(255),
+CODICECLIENTE		VARCHAR2(255),
+CODICERAPPORTO		VARCHAR2(255),
+TIPO				VARCHAR2(255),
+SOTTO_RAPPORTO		VARCHAR2(255),
+CODICEBANCA			VARCHAR2(255),
+CODICEAGENZIA		VARCHAR2(255),
+STATO				VARCHAR2(255),
+IDRAPPORTO			NUMBER,
+IDPTF				NUMBER,
+CODICETITOLO		VARCHAR2(255),
+DESCRIZIONETITOLO	VARCHAR2(255),
+DATASALDO			NUMBER,
+CTV					FLOAT,
+VARIAZIONE			FLOAT,
+SOGLIA_PONDERATA	FLOAT,
+SOGLIA				FLOAT,
+DATAINS				TIMESTAMP(6),
+DATAINIZIO			TIMESTAMP(6),
+SOMMAMOV			FLOAT,
+SOMMAMOVPOS			FLOAT,
+SOMMAMOVNEG			FLOAT,
+MINDATA				DATE,
+MAXDATA				DATE,
+DATAAGG				DATE,
+DIFF_EURO			FLOAT
+);  
+  
+  
+TYPE squad_ctv_TYPE IS TABLE OF squad_ctv_TYPE_cur;
+
+RES_squad_ctv squad_ctv_TYPE;
+	
+ROWS    PLS_INTEGER := 10000;
+I 		NUMBER(38,0):=0;
+
+BEGIN
+							
+		LOOP
+			FETCH squad_ctv BULK COLLECT INTO RES_squad_ctv LIMIT ROWS;
+            	EXIT WHEN RES_squad_ctv.COUNT = 0;  
+			
+			I:=0;
+			I:= RES_squad_ctv.COUNT;
+				
+			FORALL J IN RES_squad_ctv.FIRST .. RES_squad_ctv.LAST	
+
+				MERGE INTO SQUADRATURE_CTV_2018 S
+						USING
+								(SELECT RES_squad_ctv(J).TIPOSTRUM AS TIPOSTRUM,
+										RES_squad_ctv(J).CODICECLIENTE AS CODICECLIENTE,
+										RES_squad_ctv(J).CODICERAPPORTO AS CODICERAPPORTO,
+										RES_squad_ctv(J).TIPO AS TIPO,
+										RES_squad_ctv(J).SOTTO_RAPPORTO AS SOTTO_RAPPORTO,
+										RES_squad_ctv(J).CODICEBANCA AS CODICEBANCA,
+										RES_squad_ctv(J).CODICEAGENZIA AS CODICEAGENZIA,
+										RES_squad_ctv(J).STATO AS STATO,
+										RES_squad_ctv(J).IDRAPPORTO AS IDRAPPORTO,
+										RES_squad_ctv(J).IDPTF AS IDPTF,
+										RES_squad_ctv(J).CODICETITOLO AS CODICETITOLO,
+										RES_squad_ctv(J).DESCRIZIONETITOLO AS DESCRIZIONETITOLO,
+										RES_squad_ctv(J).DATASALDO AS DATASALDO,
+										RES_squad_ctv(J).CTV AS CTV,
+										RES_squad_ctv(J).VARIAZIONE AS VARIAZIONE,
+										RES_squad_ctv(J).SOGLIA_PONDERATA AS SOGLIA_PONDERATA,
+										RES_squad_ctv(J).SOGLIA AS SOGLIA,
+										RES_squad_ctv(J).DATAINS AS DATAINS,
+										RES_squad_ctv(J).DATAINIZIO AS DATAINIZIO,
+										RES_squad_ctv(J).SOMMAMOV AS SOMMAMOV,
+										RES_squad_ctv(J).SOMMAMOVPOS AS SOMMAMOVPOS,
+										RES_squad_ctv(J).SOMMAMOVNEG AS SOMMAMOVNEG,
+										RES_squad_ctv(J).MINDATA AS MINDATA,
+										RES_squad_ctv(J).MAXDATA AS MAXDATA,
+										RES_squad_ctv(J).DATAAGG AS DATAAGG,
+										RES_squad_ctv(J).DIFF_EURO AS DIFF_EURO
+								 FROM DUAL
+								) A
+							ON (S.IDRAPPORTO = A.IDRAPPORTO
+								AND S.CODICETITOLO = A.CODICETITOLO
+								AND S.DATASALDO = A.DATASALDO)				
+				WHEN MATCHED THEN UPDATE 
+										SET S.TIPOSTRUM = A.TIPOSTRUM,
+											S.CODICECLIENTE = A.CODICECLIENTE,
+											S.CODICERAPPORTO = A.CODICERAPPORTO,
+											S.TIPO = A.TIPO,
+											S.SOTTO_RAPPORTO = A.SOTTO_RAPPORTO,
+											S.CODICEBANCA = A.CODICEBANCA,
+											S.CODICEAGENZIA = A.CODICEAGENZIA,
+											S.STATO = A.STATO,
+											S.IDPTF = A.IDPTF,
+											S.DESCRIZIONETITOLO = A.DESCRIZIONETITOLO,
+											S.CTV = A.CTV,
+											S.VARIAZIONE = A.VARIAZIONE,
+											S.SOGLIA_PONDERATA = A.SOGLIA_PONDERATA,
+											S.SOGLIA = A.SOGLIA,
+											S.DATAINIZIO = A.DATAINIZIO,
+											S.SOMMAMOV = A.SOMMAMOV,
+											S.SOMMAMOVPOS = A.SOMMAMOVPOS,
+											S.SOMMAMOVNEG = A.SOMMAMOVNEG,
+											S.MINDATA = A.MINDATA,
+											S.MAXDATA = A.MAXDATA,
+											S.DATAAGG = A.DATAAGG,
+											S.DIFF_EURO = A.DIFF_EURO
+				WHEN NOT MATCHED THEN 
+									INSERT (TIPOSTRUM,
+											CODICECLIENTE,
+											CODICERAPPORTO,
+											TIPO,
+											SOTTO_RAPPORTO,
+											CODICEBANCA,
+											CODICEAGENZIA,
+											STATO,
+											IDRAPPORTO,
+											IDPTF,
+											CODICETITOLO,
+											DESCRIZIONETITOLO,
+											DATASALDO,
+											CTV,
+											VARIAZIONE,
+											SOGLIA_PONDERATA,
+											SOGLIA,
+											DATAINS,
+											DATAINIZIO,
+											SOMMAMOV,
+											SOMMAMOVPOS,
+											SOMMAMOVNEG,
+											MINDATA,
+											MAXDATA,
+											DATAAGG,
+											DIFF_EURO
+											)
+									VALUES (A.TIPOSTRUM,
+											A.CODICECLIENTE,
+											A.CODICERAPPORTO,
+											A.TIPO,
+											A.SOTTO_RAPPORTO,
+											A.CODICEBANCA,
+											A.CODICEAGENZIA,
+											A.STATO,
+											A.IDRAPPORTO,
+											A.IDPTF,
+											A.CODICETITOLO,
+											A.DESCRIZIONETITOLO,
+											A.DATASALDO,
+											A.CTV,
+											A.VARIAZIONE,
+											A.SOGLIA_PONDERATA,
+											A.SOGLIA,
+											A.DATAINS,
+											A.DATAINIZIO,
+											A.SOMMAMOV,
+											A.SOMMAMOVPOS,
+											A.SOMMAMOVNEG,
+											A.MINDATA,
+											A.MAXDATA,
+											A.DATAAGG,
+											A.DIFF_EURO
+										);						
+				
+				INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' Squadrature CTV 2018: ' || I || ' record'); 
+		COMMIT;		        
+	          
+	END LOOP;
+	
+    PIPE ROW(i);
+	RETURN;
+END
+;

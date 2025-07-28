@@ -1,0 +1,75 @@
+DECLARE 
+
+    rowcounts NUMBER;
+    
+BEGIN
+	
+MERGE INTO
+    COSTO_MOVIMENTO CMOV
+  USING (
+          SELECT
+            case when substr(TCOST.codicebanca, 1) != '0' and length(TCOST.codicebanca)= 4 
+            	then '0' || TCOST.codicebanca
+			else TCOST.codicebanca end as CODICE_BANCA,
+            TCOST.CODICECOSTO     	AS CODICE_COSTO,
+            RAPP.ID               	AS IDRAPPORTO,
+            TCOST.CODICEMOVIMENTO	AS NUMREG,
+            TCOST.IMPORTO         	AS IMPORTO,
+            'CM'                  	AS TIPO_FONTE,
+            NULL                  	AS DATA_DA,
+            NULL                  	AS DATA_A,
+            NULL                  	AS SSA,
+            NULL                  	AS DATA_AGGIORNAMENTO,
+            NULL                  	AS TIPO_RAPPORTO
+          FROM
+            TMP_PFCOSTI TCOST
+          INNER JOIN MOVIMENTO MOV 
+          	ON TCOST.CODICEMOVIMENTO = MOV.NUMREG
+          INNER JOIN RAPPORTO RAPP 
+            ON MOV.IDRAPPORTO = RAPP.ID
+        ) TOMERGE
+  ON
+  (CMOV.IDRAPPORTO = TOMERGE.IDRAPPORTO
+   AND CMOV.NUMREG = TOMERGE.NUMREG
+   AND CMOV.CODICE_COSTO = TOMERGE.CODICE_COSTO
+  )
+  WHEN MATCHED THEN
+  UPDATE
+  SET
+    CMOV.IMPORTO = TOMERGE.IMPORTO,
+    CMOV.TIPO_FONTE =  TOMERGE.TIPO_FONTE,
+    CMOV.DATA_DA = TOMERGE.DATA_DA,
+    CMOV.DATA_A = TOMERGE.DATA_A,
+    CMOV.SSA =  TOMERGE.SSA,
+    CMOV.DATA_AGGIORNAMENTO = TOMERGE.DATA_AGGIORNAMENTO
+  WHEN NOT MATCHED THEN
+  INSERT
+    (CODICE_BANCA,
+     CODICE_COSTO,
+     IDRAPPORTO,
+     NUMREG,
+     IMPORTO,
+     TIPO_FONTE,
+     DATA_DA,
+     DATA_A,
+     SSA,
+     DATA_AGGIORNAMENTO)
+  VALUES (
+    TOMERGE.CODICE_BANCA,
+    TOMERGE.CODICE_COSTO,
+    TOMERGE.IDRAPPORTO,
+    TOMERGE.NUMREG,
+    TOMERGE.IMPORTO,
+    TOMERGE.TIPO_FONTE,
+    TOMERGE.DATA_DA,
+    TOMERGE.DATA_A,
+    TOMERGE.SSA,
+    TOMERGE.DATA_AGGIORNAMENTO
+  );
+  
+  rowcounts := SQL%ROWCOUNT;
+
+INSERT INTO output_print_table VALUES (to_number(to_char(sysdate,'YYYYMMDDHH24MISS')) || ' MERGE COSTI DA TMP_PFCOSTI IN COSTO_MOVIMENTO: ' || rowcounts);
+	COMMIT;
+  
+  END;

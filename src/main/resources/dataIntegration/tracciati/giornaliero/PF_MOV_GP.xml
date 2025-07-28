@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	
+	<tableName>PFMOV_GP</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_GPM_Movimenti_CONCAT.csv</importFilePath>
+	<!-- Note Il file ha il formato definito da poste vita. Attenzione: è un 
+		file posizionale a lunghezza fissa, e c'è sia un record di testa che un record 
+		di coda. I numeri hanno '.' come separatore dei decimali Le date hanno formato 
+		AAAAMMGG -->
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName>
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>false</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck> 
+	<fixWidth>true</fixWidth>
+	
+	<tracciatoField>
+		<columnName>CODICE_TRANSAZIONE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Transazione]]></description>
+		<columnMaxLength>24</columnMaxLength>
+		<fixedStart>0</fixedStart>
+		<fixedEnd>24</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>DATA_SETTLEMENT</columnName>
+		<columnType>INTEGER</columnType>
+		<description><![CDATA[Data di Regolamento]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>24</fixedStart>
+		<fixedEnd>32</fixedEnd>
+		<obligatory>true</obligatory>
+		<minValue>00000001</minValue>
+		<maxValue>29990000</maxValue>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>DATA_TRANSAZIONE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data Transazione]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>32</fixedStart>
+		<fixedEnd>40</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>NUMERO_DEPOSITO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Numero Deposito]]></description>
+		<columnMaxLength>12</columnMaxLength>
+		<fixedStart>40</fixedStart>
+		<fixedEnd>52</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>NUMERO_SOTTODEPOSITO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Numero Sottodeposito]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<fixedStart>52</fixedStart>
+		<fixedEnd>57</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CODICETITOLO_INTERNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Titolo Interno]]></description>
+		<columnMaxLength>12</columnMaxLength>
+		<fixedStart>57</fixedStart>
+		<fixedEnd>69</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>IMPORTO_TRANSATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Importo transato]]></description>
+		<columnMaxLength>11</columnMaxLength>
+		<fixedStart>69</fixedStart>
+		<fixedEnd>80</fixedEnd>
+		<obligatory>true</obligatory>
+		<format>FIXEDLENDECIMAL:2</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CAUSALE_MOVIMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Causale Movimento Titoli]]></description>
+		<columnMaxLength>4</columnMaxLength>
+		<fixedStart>80</fixedStart>
+		<fixedEnd>84</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>QUANTITA_ORDINATA</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Quantità Ordinata]]></description>
+		<columnMaxLength>18</columnMaxLength>
+		<fixedStart>84</fixedStart>
+		<fixedEnd>102</fixedEnd>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>QUANTITA_EFFETTIVA</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Quantità Effettiva]]></description>
+		<columnMaxLength>18</columnMaxLength>
+		<fixedStart>102</fixedStart>
+		<fixedEnd>120</fixedEnd>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>SEGNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Segno]]></description>
+		<columnMaxLength>1</columnMaxLength>
+		<fixedStart>120</fixedStart>
+		<fixedEnd>121</fixedEnd>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>COMMISSIONI</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Commissioni]]></description>
+		<columnMaxLength>15</columnMaxLength>
+		<fixedStart>121</fixedStart>
+		<fixedEnd>136</fixedEnd>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>DIVISA_TRATTAZIONE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Divisa trattazione]]></description>
+		<columnMaxLength>3</columnMaxLength>
+		<fixedStart>136</fixedStart>
+		<fixedEnd>139</fixedEnd>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CAMBIO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Cambio]]></description>
+		<columnMaxLength>13</columnMaxLength>
+		<fixedStart>139</fixedStart>
+		<fixedEnd>152</fixedEnd>
+		<format>FIXEDLENDECIMAL:6</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CANALE_ORDINE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Canale immissione ordine]]></description>
+		<columnMaxLength>1</columnMaxLength>
+		<fixedStart>152</fixedStart>
+		<fixedEnd>153</fixedEnd>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>NDG</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Ndg]]></description>
+		<columnMaxLength>13</columnMaxLength>
+		<fixedStart>153</fixedStart>
+		<fixedEnd>166</fixedEnd>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CODICEFISCALE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Ndg]]></description>
+		<columnMaxLength>16</columnMaxLength>
+		<fixedStart>166</fixedStart>
+		<fixedEnd>182</fixedEnd>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>ID_PRODOTTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[ID_PRODOTTO]]></description>
+		<columnMaxLength>36</columnMaxLength>
+		<fixedStart>182</fixedStart>
+		<fixedEnd>218</fixedEnd>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>UPFRONT_FEE_LORDA</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[UPFRONT_FEE_LORDA]]></description>
+		<columnMaxLength>10</columnMaxLength>
+		<fixedStart>218</fixedStart>
+		<fixedEnd>228</fixedEnd>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>UPFRONT_FEE_NETTA</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[UPFRONT_FEE_NETTA]]></description>
+		<columnMaxLength>10</columnMaxLength>
+		<fixedStart>228</fixedStart>
+		<fixedEnd>238</fixedEnd>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>UPFRONT_FEE_RETROCESSIONI</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[UPFRONT_FEE_RETROCESSIONI]]></description>
+		<columnMaxLength>10</columnMaxLength>
+		<fixedStart>238</fixedStart>
+		<fixedEnd>248</fixedEnd>
+		<format>FIXEDLENDECIMAL:3</format>
+	</tracciatoField>
+</tracciato>

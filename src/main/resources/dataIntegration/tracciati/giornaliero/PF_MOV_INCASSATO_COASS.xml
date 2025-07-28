@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFMOV_INC_COASS</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/BP_INCASSATO_COASS_GG_CONCAT.csv</importFilePath>
+	<!-- Note Il file ha il formato definito da poste vita. Attenzione: è un 
+		file posizionale a lunghezza fissa, e c'è sia un record di testa che un record 
+		di coda. I numeri hanno '.' come separatore dei decimali Le date hanno formato 
+		AAAAMMGG -->
+	<readerClassName>it.prometeia.batch.importa.RendReaderWarnNoFile</readerClassName>
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>false</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	<fixWidth>true</fixWidth>
+	
+	<!-- 1 Ramo Ramo della polizza S (KEY) Varchar(2) -->
+	<tracciatoField>
+		<columnName>RAMO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Ramo]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>0</fixedStart>
+		<fixedEnd>2</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<!-- 2 CodiceProdotto Codice del prodotto, es MRU04 S (KEY) Varchar(5) Per le multiramo è il prodotto sottostante -->
+	<tracciatoField>
+		<columnName>CODICE_PRODOTTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceProdotto]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<fixedStart>2</fixedStart>
+		<fixedEnd>7</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<!-- 3 Numero Polizza Codice rapporto S (KEY) Varchar(11) Per '"legare" con codice rapporto in PCG aggiungere uno 0 in testa -->
+	<tracciatoField>
+		<columnName>NUMERO_POLIZZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Numero Polizza]]></description>
+		<columnMaxLength>11</columnMaxLength>
+		<fixedStart>7</fixedStart>
+		<fixedEnd>18</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<!-- 4 	Tipo TItolo I valori ammessi sono quelli della tipologia causali polizze con codice dominio =017.
+			Nel flusso di esempio fornitoci, del 31 luglio, sono presenti solo i valori:
+			01 - PRIMA RATA DI PRIMA ANNUALITÀ                                                                       
+			02 - PREMIO UNICO                                                                                        
+			03 - RATA DI PRIMA ANNUALITÀ                                                                             
+			04 - RATA DI ANNUALITÀ SUCCESSIVE                                                                        
+			05 - RATA ESTEMPORANEA DI PRIMA ANNUALITÀ                                                                
+			06 - RATA ESTEMPORANEA DI ANNUALITÀ SUCCESSIVA      
+			07- ????                                                     
+			18 - PREMI ALTRIMENTI SODDISFATTI
+			90 - ????-->
+	<tracciatoField>
+		<columnName>TIPO_TITOLO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Tipo Titolo]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>18</fixedStart>
+		<fixedEnd>20</fixedEnd>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+	<!-- 5 data effetto titolo -->
+	<tracciatoField>
+		<columnName>DATA_EFFETTO_TITOLO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data effetto titolo]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>20</fixedStart>
+		<fixedEnd>28</fixedEnd>
+	</tracciatoField>
+	<!-- 6 data effetto polizza -->
+	<tracciatoField>
+		<columnName>DATA_EFFETTO_POLIZZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data effetto polizza]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>28</fixedStart>
+		<fixedEnd>36</fixedEnd>
+	</tracciatoField>
+	<!-- 7 frazionario di emissione della polizza -->
+	<tracciatoField>
+		<columnName>FRAZIONARIO_DI_EMISSIONE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Frazionario di emissione della polizza]]></description>
+		<columnMaxLength>6</columnMaxLength>
+		<fixedStart>36</fixedStart>
+		<fixedEnd>42</fixedEnd>
+	</tracciatoField>
+	<!-- 8 codice di frazionamento I valori ammessi sono quelli della tipologia causali polizze con codice dominio =025-->
+	<tracciatoField>
+		<columnName>CODICE_FRAZIONAMENTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Frazionario di emissione della polizza]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>42</fixedStart>
+		<fixedEnd>44</fixedEnd>
+	</tracciatoField>
+	<!-- 9 Data scadenza polizza-->
+	<tracciatoField>
+		<columnName>DATA_SCADENZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data scadenza polizza]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>44</fixedStart>
+		<fixedEnd>52</fixedEnd>
+	</tracciatoField>
+	<!-- 10 Data valuta titolo. Assumiamo che sia la nostra data valuta-->
+	<tracciatoField>
+		<columnName>DATA_VALUTA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data valuta titolo]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>52</fixedStart>
+		<fixedEnd>60</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 11 Data competenza incasso-->
+	<tracciatoField>
+		<columnName>DATA_COMPETENZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data competenza]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>60</fixedStart>
+		<fixedEnd>68</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 12 Codice Fiscale Contraente-->
+	<tracciatoField>
+		<columnName>CODICE_FISCALE_CONTRAENTE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Fiscale Contraente]]></description>
+		<columnMaxLength>16</columnMaxLength>
+		<fixedStart>68</fixedStart>
+		<fixedEnd>84</fixedEnd>
+	</tracciatoField>
+	<!-- 13 Premio Lordo Assumiamo sia il controvalore regolato-->
+	<tracciatoField>
+		<columnName>PREMIO_LORDO</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Importo premio lordo]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>84</fixedStart>
+		<fixedEnd>103</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 14 Premio netto - Importo premio lordo competenza poste vita-->
+	<tracciatoField>
+		<columnName>PREMIO_NETTO</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Premio netto]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>103</fixedStart>
+		<fixedEnd>122</fixedEnd>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	<!-- 15 Premio puro-->
+	<tracciatoField>
+		<columnName>PREMIO_PURO</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Premio puro]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>122</fixedStart>
+		<fixedEnd>141</fixedEnd>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	<!-- 16 Premio imponibile Calcolato nel seguente modo: se provvigioni d’acquisto+provvigioni di incasso = 0 allora Premio imponibile =0 altrimenti Premio imponibile = Premio Lordo-->
+	<tracciatoField>
+		<columnName>PREMIO_IMPONIBILE</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Premio imponibile]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>141</fixedStart>
+		<fixedEnd>160</fixedEnd>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	<!-- 17 Importo del caricamento totale Totale dei costi. Include il diritto fisso-->
+	<tracciatoField>
+		<columnName>CARICAMENTO</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Caricamento]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>160</fixedStart>
+		<fixedEnd>179</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 18 Importo Diritto fisso-->
+	<tracciatoField>
+		<columnName>DIRITTO_FISSO</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Diritto fisso]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>179</fixedStart>
+		<fixedEnd>198</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 19 Codice motivo storno "I valori ammessi sono quelli della tipologia causali polizze con codice dominio =069.
+	Nell'esempio fornito solo:
+	1
+	2
+	5 - ANNULLAMENTO PER RECESSO
+	9
+	N/A
+	Manca l'aggancio verso il movimento stornato. Come si legano stornante e stornato ?"-->
+	<tracciatoField>
+		<columnName>CODICE_MOTIVO_STORNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice motivo storno]]></description>
+		<columnMaxLength>3</columnMaxLength>
+		<fixedStart>198</fixedStart>
+		<fixedEnd>201</fixedEnd>
+	</tracciatoField>
+	<!-- 20 Provvigioni di acquisto-->
+	<tracciatoField>
+		<columnName>PROVVIGIONI_DI_ACQUISTO</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Provvigioni di acquisto]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>201</fixedStart>
+		<fixedEnd>220</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 21 Provvigioni di incasso-->
+	<tracciatoField>
+		<columnName>PROVVIGIONI_DI_INCASSO</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Provvigioni di incasso]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>220</fixedStart>
+		<fixedEnd>239</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 22 Data carico-->
+	<tracciatoField>
+		<columnName>DATA_CARICO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Data di carico]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<fixedStart>239</fixedStart>
+		<fixedEnd>247</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 23 Imposte - Importo della voce di costo "Imposte"- "Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO. NOTA: verificare gli importi negativi"-->
+	<tracciatoField>
+		<columnName>IMPOSTE_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Imposte]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>247</fixedStart>
+		<fixedEnd>266</fixedEnd>
+	</tracciatoField>
+	<!-- 24 InteresseMora - Importo della voce di costo "InteresseMora"- "Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO"-->
+	<tracciatoField>
+		<columnName>INTERESSE_MORA</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[InteresseMora]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>266</fixedStart>
+		<fixedEnd>285</fixedEnd>
+	</tracciatoField>
+	<!-- 25 RitenutaInteresseMora- Importo della voce di costo "RitenutaInteresseMora"- "Dobbiamo generare lato  PdR il corrispondente movimento di  costo sulla COSTO_MOVIMENTO"-->
+	<tracciatoField>
+		<columnName>RITENUTA_INTERESSE_MORA</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[RitenutaInteresseMora]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>285</fixedStart>
+		<fixedEnd>304</fixedEnd>
+	</tracciatoField>
+	<!-- 26 Costo Compagnia -->
+	<tracciatoField>
+		<columnName>COSTO_COMPAGNIA</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Costo Compagnia]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>304</fixedStart>
+		<fixedEnd>323</fixedEnd>
+	</tracciatoField>
+	<!-- 27 Codice Accordo -->
+	<tracciatoField>
+		<columnName>CODICE_ACCORDO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Accordo]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<fixedStart>323</fixedStart>
+		<fixedEnd>328</fixedEnd>
+	</tracciatoField>
+	<!-- 28 Premio Lordo Coass -->
+	<tracciatoField>
+		<columnName>PREMIO_LORDO_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Premio Lordo Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>328</fixedStart>
+		<fixedEnd>347</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 29 Caricamento comprensivo della quota coass -->
+	<tracciatoField>
+		<columnName>CARICAMENTO_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Caricamento Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>347</fixedStart>
+		<fixedEnd>366</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 30 L’informazione al campo precedente contiene la quota di coassicurazione mentre, per omogeneità, si espone al quota delle imposte al netto della coass -->
+	<tracciatoField>
+		<columnName>IMPOSTE_NETTO_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Imposte Netto Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>366</fixedStart>
+		<fixedEnd>385</fixedEnd>
+	</tracciatoField>
+	<!-- 31 Diritto Fisso comprensivo della quota coass-->
+	<tracciatoField>
+		<columnName>DIRITTO_FISSO_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Diritto fisso Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>385</fixedStart>
+		<fixedEnd>404</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 32 Interesse mora comprensivo della quota coass -->
+	<tracciatoField>
+		<columnName>INTERESSE_MORA_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[InteresseMoraCoass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>404</fixedStart>
+		<fixedEnd>423</fixedEnd>
+	</tracciatoField>
+	<!-- 33 RitenutaInteresseMora - Ritenuta interesse mora comprensivo della quota coass -->
+	<tracciatoField>
+		<columnName>RITENUTA_INTERESSE_MORA_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[RitenutaInteresseMoraCoass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>423</fixedStart>
+		<fixedEnd>442</fixedEnd>
+	</tracciatoField>
+	<!-- 34 Provvigioni di acquisto Coass -->
+	<tracciatoField>
+		<columnName>PROVVIGIONI_DI_ACQUISTO_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Provvigioni di acquisto Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>442</fixedStart>
+		<fixedEnd>461</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<!-- 35 Provvigioni di incasso Coass -->
+	<tracciatoField>
+		<columnName>PROVVIGIONI_DI_INCASSO_COASS</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Provvigioni di incasso Coass]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>461</fixedStart>
+		<fixedEnd>480</fixedEnd>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CODICE_TIPO_CONTRIBUTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Tipo Contributo]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>480</fixedStart>
+		<fixedEnd>482</fixedEnd>
+		<obligatory>false</obligatory>
+	</tracciatoField>	
+	<tracciatoField>
+		<columnName>COSTO_ETF</columnName>
+		<columnType>DECIMAL</columnType>
+		<format>#.#</format>
+		<description><![CDATA[Costo ETF]]></description>
+		<columnMaxLength>19</columnMaxLength>
+		<fixedStart>482</fixedStart>
+		<fixedEnd>501</fixedEnd>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+	<tracciatoField>
+		<columnName>CODICE_LINEA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Codice Linea Investimento]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<fixedStart>501</fixedStart>
+		<fixedEnd>503</fixedEnd>
+		<obligatory>false</obligatory>
+	</tracciatoField>
+</tracciato>

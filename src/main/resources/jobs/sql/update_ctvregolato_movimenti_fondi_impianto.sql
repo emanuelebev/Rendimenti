@@ -1,0 +1,126 @@
+DECLARE
+
+CURSOR UPD_CTV_MOV_SCAR IS
+SELECT   DISTINCT M.IDRAPPORTO, M.NUMREG, SS.VALORE AS PREZZO, M.QTA, M.SPESECOMM AS COMMISSIONI, M.TASSAZIONE AS IMPOSTE  
+FROM MOVIMENTO M
+INNER JOIN CAUSALE C
+	ON C.CODICECAUSALE  = M.CAUSALE
+INNER JOIN SERIE_STORICA SS
+  ON M.CODICETITOLO = SS.CODICETITOLO 
+  AND SS.DATALIVELLO = (SELECT MAX(SS1.DATALIVELLO)
+                        FROM SERIE_STORICA SS1
+                        WHERE SS1.CODICETITOLO = M.CODICETITOLO 
+                        AND SS1.DATALIVELLO <= M.DATA)
+WHERE CAUSALE_ORI IN ('ESS', 'QXS', 'TCS', 'QCS', 'FDS')
+AND M.CTV = 0;
+
+CURSOR UPD_CTV_MOV_CAR IS
+SELECT   DISTINCT M.IDRAPPORTO, M.NUMREG, SS.VALORE AS PREZZO, M.QTA, M.SPESECOMM AS COMMISSIONI, M.TASSAZIONE AS IMPOSTE  
+FROM MOVIMENTO M
+INNER JOIN CAUSALE C
+	ON C.CODICECAUSALE  = M.CAUSALE
+INNER JOIN SERIE_STORICA SS
+  ON M.CODICETITOLO = SS.CODICETITOLO 
+  AND SS.DATALIVELLO = (SELECT MAX(SS1.DATALIVELLO)
+                        FROM SERIE_STORICA SS1
+                        WHERE SS1.CODICETITOLO = M.CODICETITOLO 
+                        AND SS1.DATALIVELLO <= M.DATA)
+WHERE CAUSALE_ORI IN ('ECS', 'QYS', 'TSS', 'QSS', 'FCS')
+AND M.CTV = 0;
+
+TYPE UPD_CTV_MOV_CAR_TYPE IS TABLE OF UPD_CTV_MOV_CAR%ROWTYPE INDEX BY PLS_INTEGER;
+TYPE UPD_CTV_MOV_SCAR_TYPE IS TABLE OF UPD_CTV_MOV_SCAR%ROWTYPE INDEX BY PLS_INTEGER;
+	
+RES_UPD_CTV_MOV_SCAR UPD_CTV_MOV_SCAR_TYPE;
+RES_UPD_CTV_MOV_CAR UPD_CTV_MOV_CAR_TYPE;
+	
+ROWS      PLS_INTEGER := 10000;
+	        
+I 				NUMBER(38,0);
+TOTALE			NUMBER(38,0):=0;
+	
+BEGIN
+
+	 
+		BEGIN
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'RAPPORTO', degree => 4, estimate_percent=>1); 
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'MOVIMENTO', degree => 4, estimate_percent=>1); 
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'PORTAFOGLIO', degree => 4, estimate_percent=>1); 
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'SALDO', degree => 4, estimate_percent=>1); 
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'SALDO_REND', degree => 4, estimate_percent=>1); 
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'COSTO_MOVIMENTO', degree => 4, estimate_percent=>1); 
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'SERIE_STORICA', degree => 4, estimate_percent=>1); 
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'CAUSALE', degree => 4, estimate_percent=>1);
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'STRUMENTOFINANZIARIO', degree => 4, estimate_percent=>1);
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'NDG', degree => 4, estimate_percent=>1); 
+			dbms_stats.gather_table_stats(ownname => sys_context('USERENV', 'CURRENT_SCHEMA'), tabname => 'SOGLIESQUAD_CTV', degree => 4, estimate_percent=>1);
+		END;
+	
+	
+	
+		BEGIN
+			OPEN UPD_CTV_MOV_SCAR;
+			LOOP
+					FETCH UPD_CTV_MOV_SCAR BULK COLLECT INTO RES_UPD_CTV_MOV_SCAR LIMIT ROWS;
+						EXIT WHEN RES_UPD_CTV_MOV_SCAR.COUNT = 0;  
+						
+			      I:=0;
+			      I:= RES_UPD_CTV_MOV_SCAR.COUNT;
+			      TOTALE := TOTALE + I;
+						
+						FORALL J IN RES_UPD_CTV_MOV_SCAR.FIRST .. RES_UPD_CTV_MOV_SCAR.LAST		
+			
+						--POPOLIAMO "FONTE" COME PDR IN FASE DI UPDATE DEL CTV
+						UPDATE   MOVIMENTO MOV
+						SET MOV.CTV = (RES_UPD_CTV_MOV_SCAR(J).PREZZO * RES_UPD_CTV_MOV_SCAR(J).QTA) + (RES_UPD_CTV_MOV_SCAR(J).COMMISSIONI + RES_UPD_CTV_MOV_SCAR(J).IMPOSTE), 
+							FONTE = 'PDR'
+						WHERE  MOV.IDRAPPORTO = RES_UPD_CTV_MOV_SCAR(J).IDRAPPORTO
+						AND MOV.NUMREG = RES_UPD_CTV_MOV_SCAR(J).NUMREG;
+						
+						INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' UPDATE CTV REGOLATO MOVIMENTI DI SCARICO QUOTE FONDI: ' || I || ' RECORD');
+						        
+					    COMMIT;		        
+			            
+			END LOOP;
+			CLOSE UPD_CTV_MOV_SCAR;
+			
+			INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' UPDATE CTV REGOLATO MOVIMENTI DI SCARICO QUOTE FONDI: ' || TOTALE);
+			COMMIT;
+		END;
+		
+		BEGIN
+	
+		I:=0;
+		TOTALE:=0;
+			
+			OPEN UPD_CTV_MOV_CAR;
+			LOOP
+					FETCH UPD_CTV_MOV_CAR BULK COLLECT INTO RES_UPD_CTV_MOV_CAR LIMIT ROWS;
+						EXIT WHEN RES_UPD_CTV_MOV_CAR.COUNT = 0;  
+						
+			      I:=0;
+			      I:= RES_UPD_CTV_MOV_CAR.COUNT;
+			      TOTALE := TOTALE + I;
+						
+						FORALL J IN RES_UPD_CTV_MOV_CAR.FIRST .. RES_UPD_CTV_MOV_CAR.LAST		
+			
+						UPDATE   MOVIMENTO MOV
+						SET MOV.CTV = (RES_UPD_CTV_MOV_CAR(J).PREZZO * RES_UPD_CTV_MOV_CAR(J).QTA) - (RES_UPD_CTV_MOV_CAR(J).COMMISSIONI + RES_UPD_CTV_MOV_CAR(J).IMPOSTE),
+							FONTE = 'PDR'
+						WHERE  MOV.IDRAPPORTO = RES_UPD_CTV_MOV_CAR(J).IDRAPPORTO
+						AND MOV.NUMREG = RES_UPD_CTV_MOV_CAR(J).NUMREG;
+						
+						
+						INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' UPDATE CTV REGOLATO MOVIMENTI DI CARICO QUOTE FONDI: ' || I || ' RECORD');
+						        
+					        COMMIT;		        
+			            
+			END LOOP;
+			CLOSE UPD_CTV_MOV_CAR;
+			
+			INSERT INTO OUTPUT_PRINT_TABLE VALUES (TO_NUMBER(TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')) || ' UPDATE CTV REGOLATO MOVIMENTI DI CARICO QUOTE FONDI: ' || TOTALE);
+			COMMIT;
+			
+		END;
+		
+END;

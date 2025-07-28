@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFMOV_INC_FONDO</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/BP_INCASSI_FONDO_MULTIRAMO_GG_CONCAT.csv</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.RendReaderWarnNoFile</readerClassName> 
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	
+	<tracciatoField>
+		<columnName>ID_TITOLO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[IdTitolo]]></description>
+		<columnMaxLength>7</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>RAMO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Ramo]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CODICE_PRODOTTO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceProdotto]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>NUMERO_POLIZZA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[NumeroPolizza]]></description>
+		<columnMaxLength>11</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>TIPO_TITOLO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[TipoTitolo]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>DATA_EFFETTO_TITOLO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataEffettoTitolo]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CODICE_MOTIVO_STORNO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceMotivoStorno]]></description>
+		<columnMaxLength>3</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>DATA_CARICO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataCarico]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>CODICE_FONDO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceFondo]]></description>
+		<columnMaxLength>2</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>ISIN</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[Isin]]></description>
+		<columnMaxLength>12</columnMaxLength>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+	
+	<tracciatoField>
+		<columnName>QUOTE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Quote]]></description>
+		<columnMaxLength>22</columnMaxLength>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>NAV</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Nav]]></description>
+		<columnMaxLength>22</columnMaxLength>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>IMPORTO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Importo]]></description>
+		<columnMaxLength>22</columnMaxLength>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>DATA_NAV</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataNav]]></description>
+		<columnMaxLength>8</columnMaxLength>
+		<obligatory>false</obligatory>
+		<tableKey>false</tableKey>
+	</tracciatoField>
+
+	<tracciatoField>
+		<columnName>COSTO_ETF</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CostoETF]]></description>
+		<columnMaxLength>19</columnMaxLength>
+	</tracciatoField>
+
+</tracciato>

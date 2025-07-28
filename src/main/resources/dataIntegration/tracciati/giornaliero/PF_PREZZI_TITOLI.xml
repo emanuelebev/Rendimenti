@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tracciato
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="tracciato.xsd">
+	<tableName>PFPREZZI_TITOLI</tableName>
+	<importFilePath>%PATH_FLUSSI_1%/Giornaliero/REND_Titoli_Prezzi_CONCAT.csv</importFilePath>
+	<readerClassName>it.prometeia.batch.importa.WarnNotExistsReader</readerClassName> 
+	<importClassName>it.prometeia.batch.importa.NoLineScartiImporter</importClassName>
+	<locale>US</locale>
+	<deliminatore>;</deliminatore>
+	<skipDropTable>true</skipDropTable>
+	<skipFirstLine>true</skipFirstLine>
+	<maxNumberNoCommit>8000</maxNumberNoCommit>
+	<strongFieldTypeCheck>true</strongFieldTypeCheck>
+	<writeScartiOnDB>true</writeScartiOnDB>
+	<createTblScarti>false</createTblScarti>
+	
+	<!-- 1 CodiceBanca Codice della banca o dell’intermediario finanziario a 
+		cui afferisce l’NDG S (KEY) N Varchar(5) Nel caso non sia prevista una codifica 
+		distinta per Banche / Intermediari appertenenti al Gruppo, puo’ essere valorizzato 
+		un unico codice rappresentativo. Ad es. 7601 x x x x -->
+
+	<tracciatoField>
+		<columnName>CODICEBANCA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceBanca]]></description>
+		<columnMaxLength>5</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 2 CodiceTitolo Codice interno Poste dello strumento: cod. numerico 
+		per AF, alfanumerico per altri S (KEY) N Varchar(50) x x x x -->
+
+	<tracciatoField>
+		<columnName>CODICETITOLO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceTitolo]]></description>
+		<columnMaxLength>50</columnMaxLength>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+	<!-- 3 DataPrezzo Data di riferimento del prezzo S (KEY) N Date x x x -->
+	<tracciatoField>
+		<columnName>DATAPREZZO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataPrezzo]]></description>
+		<obligatory>true</obligatory>
+		<tableKey>true</tableKey>
+	</tracciatoField>
+
+
+	<!-- 4 CodiceDivisa Codice divisa di riferimento del prezzo nel caso di 
+		obbligazioni riferita alla divisa del valore nominale. S N Varchar(3) x Fisso 
+		EUR Fisso EUR x -->
+
+	<tracciatoField>
+		<columnName>CODICEDIVISA</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceDivisa]]></description>
+		<columnMaxLength>3</columnMaxLength>
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+
+	<!-- 5 PrezzoControvalore Prezzo utilizzato per il calcolo del controvalore 
+		S N Number(22,3) Prezzo pieno per cliente nettista Prezzo che moltiplicato 
+		per la quantità determina il controvalore del saldo. Da generare probabilmente 
+		con una procedura di prezzatura del lotto minimo x x -->
+
+	<tracciatoField>
+		<columnName>PREZZOCONTROVALORE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[PrezzoControvalore]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+		<obligatory>true</obligatory>
+	</tracciatoField>
+
+	<!-- 6 PrezzoMercato Prezzo di mercato dello strumento, nel caso di obbligazioni 
+		si intende il corso secco. Per gli strumenti diversi da obbligazioni è uguale 
+		al prezzo controvalore (in divisa) N N Number(22,3) -->
+
+	<tracciatoField>
+		<columnName>PREZZOMERCATO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[PrezzoMercato]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 7 Rateo Lordo Rateo percentuale lordo, Valorizzato solo per le obbligazioni 
+		N N Number(22,3) -->
+
+	<tracciatoField>
+		<columnName>RATEOLORDO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Rateo Lordo]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 8 Rateo Netto Valorizzato solo per le obbligazioni N N Number(22,3) -->
+
+	<tracciatoField>
+		<columnName>RATEONETTO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Rateo Netto]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 9 RateoDisaggio Rappresenta il rateo maturato del disaggio di emissione 
+		N N Number(22,3) -->
+
+	<tracciatoField>
+		<columnName>RATEODISAGGIO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[RateoDisaggio]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 10 RitenutaDisaggio Rappresenta la ritenuta fiscale del rateo disaggio 
+		maturato N N Number(22,3) -->
+
+	<tracciatoField>
+		<columnName>RITENUTADISAGGIO</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[RitenutaDisaggio]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 11 DataRateo Data rateo Valorizzato solo per le obbligazioni N N Data -->
+
+	<tracciatoField>
+		<columnName>DATARATEO</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DataRateo]]></description>
+	</tracciatoField>
+
+	<!-- 12 CodiceFonte Codice fonte prezzi (codice piazza, codice provider) 
+		N N VarChar(50) -->
+
+	<tracciatoField>
+		<columnName>CODICEFONTE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[CodiceFonte]]></description>
+		<columnMaxLength>50</columnMaxLength>
+	</tracciatoField>
+
+
+	<!-- 13 CoefficienteCorrezione Coefficiente correttivo utilizzato per la 
+		contro valorizzazione di alcune obbligazioni. Es. coeff. di capitalizzazione 
+		(es. BOND Argentina) N N Number(22,3) Solo per alcune obbligazioni -->
+
+	<tracciatoField>
+		<columnName>COEFFICIENTECORREZIONE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CoefficienteCorrezione]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 14 PoolFactor Da utilizzare per la contro valorizzazione delle obbligazioni 
+		con pool factor N N Number(22,3) Solo per alcune obbligazioni -->
+
+	<tracciatoField>
+		<columnName>POOLFACTOR</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[PoolFactor]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+
+	<!-- 15 CoefficienteIndicizzazione Da utilizzare per la contro valorizzazione 
+		delle obbligazioni N N Number(22,3) -->
+
+	<tracciatoField>
+		<columnName>COEFFICIENTEINDICIZZAZIONE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[CoefficienteIndicizzazione]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 16 DescrCoeffIndicizzazione Descrizione del coefficiente di indicizzazione 
+		utilizzato (ad. Esempio: Euribor…) N N Varchar(50) -->
+
+	<tracciatoField>
+		<columnName>DESCRCOEFFINDICIZZAZIONE</columnName>
+		<columnType>VARCHAR</columnType>
+		<description><![CDATA[DescrCoeffIndicizzazione]]></description>
+		<columnMaxLength>50</columnMaxLength>
+	</tracciatoField>
+
+
+	<!-- 17 Moltiplicatore Base prezzo (es. vale 1 per le azioni, 0,01 per le 
+		obbligazioni) S N Number(22,3) Esprime il il coefficiente da applicare al 
+		prezzo in generale 1 per le obbligazioni (ma non sempre) 0,01 Fisso 1 Fisso 
+		1 -->
+
+	<tracciatoField>
+		<columnName>MOLTIPLICATORE</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[Moltiplicatore]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+
+	<!-- 18 PrezzoControvaloreLordista Prezzo utilizzato per il calcolo del 
+		controvalore S N Number(22,3) Prezzo pieno per cliente lordista Da confermare 
+		se richiesto -->
+
+	<tracciatoField>
+		<columnName>PREZZOCONTROVALORELORDISTA</columnName>
+		<columnType>DOUBLE</columnType>
+		<description><![CDATA[PrezzoControvaloreLordista]]></description>
+		<columnMaxLength>25</columnMaxLength>
+		<!-- TODO Number(22,3) -->
+	</tracciatoField>
+
+	<!-- 19 DataAggiornamento Data aggiornamento S N Timestamp x -->
+
+
+    <tracciatoField>
+        <columnName>DATAAGGIORNAMENTO</columnName>
+        <columnType>VARCHAR</columnType>
+        <description><![CDATA[DataAggiornamento]]></description>
+        <obligatory>true</obligatory>
+    </tracciatoField>
+</tracciato>

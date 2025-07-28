@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="job.xsd">
+	<jobName>Genera STAT_FILE_PROM</jobName>
+	<isThread>false</isThread>
+	<task>
+     <id>1</id>
+     <name>Export Task</name>
+     	<sqlProcess>
+			<sql><![CDATA[
+				BEGIN
+                     EXECUTE IMMEDIATE 'ALTER SESSION ENABLE PARALLEL DML';
+                     EXECUTE IMMEDIATE 'ALTER SESSION ENABLE PARALLEL QUERY';
+                END;
+			]]></sql>	
+    	</sqlProcess>
+		
+		<exportProcess>
+			<sql>
+				SELECT /*+PARALLEL(8)*/ COUNT(*) AS NR,'STRUMENTOFINANZIARIO' AS TAB FROM STRUMENTOFINANZIARIO UNION
+				SELECT /*+PARALLEL(8)*/ COUNT(*) AS NR,'SERIE_STORICA' AS TAB FROM SERIE_STORICA UNION
+				SELECT /*+PARALLEL(8)*/ COUNT(*) AS NR,'MOVIMENTO' AS TAB FROM MOVIMENTO UNION
+				SELECT /*+PARALLEL(8)*/ COUNT(*) AS NR,'SALDO_REND' AS TAB FROM SALDO_REND UNION
+				SELECT /*+PARALLEL(8)*/ COUNT(*) AS NR,'SALDO' AS TAB FROM SALDO UNION
+				SELECT /*+PARALLEL(8)*/ COUNT(*) AS NR,'NDG' AS TAB FROM NDG UNION
+				SELECT /*+PARALLEL(8)*/ COUNT(*) AS NR,'RAPPORTO' AS TAB FROM RAPPORTO UNION
+				SELECT /*+PARALLEL(8)*/ COUNT(*) AS NR,'SCARTI_TMP_MOVIMENTI' AS TAB FROM TBL_SCARTI_TMP_PFMOVIMENTI UNION
+				SELECT /*+PARALLEL(8)*/ COUNT(*) AS NR,'SCARTI_TMP_CAMBI' AS TAB FROM TBL_SCARTI_TMP_PFCAMBI UNION
+				SELECT /*+PARALLEL(8)*/  COUNT(*) AS NR,'SCARTI_TMP_PREZZI' AS TAB FROM TBL_SCARTI_TMP_PFPREZZI 
+			</sql>
+			<visualizzaHeader>true</visualizzaHeader>
+			<exportType>
+                <log>
+                    <fieldSeparator>;</fieldSeparator>
+                    <logLevel>INFO</logLevel>
+                    <logAnchor>##VolumesAnchor</logAnchor>
+                    <logMaxRows>50</logMaxRows>
+                </log>
+            </exportType>
+		</exportProcess>
+	</task>
+	
+	<task>
+     <id>1</id>
+     <name>Export Task</name>
+		<exportProcess>
+			<sql>
+					SELECT SUBSTR(to_number(to_char(TIMESTAMP,'yyyymmdd')),3,2) AS YEAR, 
+					       SUBSTR(to_number(to_char(TIMESTAMP,'yyyymmdd')),-4,2) AS  MONTH,
+					       SUBSTR(to_number(to_char(TIMESTAMP,'yyyymmdd')),-2,2) AS  DAY,
+					       ID_CHIAMANTE,
+					COUNT(*) AS NR_ACCESSI 
+					FROM UTENTE
+					WHERE to_number(to_char(TIMESTAMP,'yyyymmdd'))>= to_number(to_char(sysdate-30,'yyyymmdd'))
+					
+					GROUP BY
+					       SUBSTR(to_number(to_char(TIMESTAMP,'yyyymmdd')),3,2), 
+					       SUBSTR(to_number(to_char(TIMESTAMP,'yyyymmdd')),-4,2),
+					       SUBSTR(to_number(to_char(TIMESTAMP,'yyyymmdd')),-2,2),
+					       ID_CHIAMANTE
+					ORDER BY 
+					        1 DESC,        
+					        2 DESC,
+					        3 DESC	
+			</sql>
+			<visualizzaHeader>true</visualizzaHeader>
+			<exportType>
+                <log>
+                    <fieldSeparator>;</fieldSeparator>
+                    <logLevel>INFO</logLevel>
+                    <logAnchor>##AcessAnchor</logAnchor>
+                    <logMaxRows>100</logMaxRows>
+                </log>
+            </exportType>
+		</exportProcess>
+	</task>
+	
+	<task>
+     <id>1</id>
+     <name>Export Task</name>
+		<exportProcess>
+			<sql>
+				SELECT 
+				        UPPER (SUBSTR(JE.JOBNAME,1,LENGTH(JE.JOBNAME)-14)) AS JOB,
+				        ROUND((JE.DATAFINE-JE.DATAINIZIO)* 24 * 60,2) AS MINUTI,
+				        JE.DATAINIZIO,
+				        JE.DATAFINE 
+				FROM 
+				        JOBS_EXECUTED JE 
+				WHERE 
+				        JE.DATAINIZIO >= sysdate-7 
+				        AND 
+				        JE.DATAFINE IS NOT NULL 
+				ORDER BY 
+				        JE.DATAINIZIO DESC
+			</sql>
+			<visualizzaHeader>true</visualizzaHeader>
+			<exportType>
+                <log>
+                    <fieldSeparator>;</fieldSeparator>
+                    <logLevel>INFO</logLevel>
+                    <logAnchor>##BatchAnchor</logAnchor>
+                    <logMaxRows>300</logMaxRows>
+                </log>
+            </exportType>
+		</exportProcess>
+	</task>
+		
+	
+</job>
